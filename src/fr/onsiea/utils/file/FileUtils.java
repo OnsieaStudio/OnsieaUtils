@@ -39,6 +39,7 @@ package fr.onsiea.utils.file;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,18 +49,33 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import fr.onsiea.utils.function.IIFunction;
 import fr.onsiea.utils.function.IOIFunction;
+import fr.onsiea.utils.string.StringUtils;
 
 /**
  *
  */
 public class FileUtils
 {
+	public final static void main(final String[] argsIn)
+	{
+		final var sha = FileUtils.sha("P:\\Java\\sources\\tools\\ProjectInitializer\\src\\fr\\seynax\\temp\\utils\\file\\FileShaUtils.java");
+		for (final var b : sha)
+		{
+			System.out.print(b);
+		}
+		System.out.println();
+		System.out.println("VS");
+		System.out.println(StringUtils.toRawString(sha));
+	}
+
 	// Create directory and file methods
 
 	/**
@@ -646,6 +662,73 @@ public class FileUtils
 	public final static List<String> forEachLinesAndAdd(final Path pathIn, final IOIFunction<String, String> functionIn)
 	{
 		return FileUtils.forEachLinesAndAdd(pathIn.toFile(), functionIn);
+	}
+
+	// SHA methods
+
+	public final static byte[] sha(final String filePathIn)
+	{
+		return FileUtils.sha(new File(filePathIn));
+	}
+
+	public final static byte[] sha(final File fileIn)
+	{
+		MessageDigest digest = null;
+
+		try (var fis = new FileInputStream(fileIn))
+		{
+			digest = MessageDigest.getInstance("SHA-1");
+
+			var			n		= 0;
+			final var	buffer	= new byte[8192];
+			while (n != -1)
+			{
+				n = fis.read(buffer);
+				if (n > 0)
+				{
+					digest.update(buffer, 0, n);
+				}
+			}
+			fis.close();
+		}
+		catch (final IOException | NoSuchAlgorithmException e)
+		{
+			e.printStackTrace();
+		}
+
+		if (digest != null)
+		{
+			return digest.digest();
+		}
+
+		return null;
+	}
+
+	public final static byte[] sha(final Path filePathIn)
+	{
+		return FileUtils.sha(filePathIn.toFile());
+	}
+
+	public final static String stringSha(final String filePathIn)
+	{
+		return FileUtils.stringSha(new File(filePathIn));
+	}
+
+	public final static String stringSha(final File fileIn)
+	{
+		final var sha = FileUtils.sha(fileIn);
+
+		if (sha != null)
+		{
+			return StringUtils.toRawString(sha);
+		}
+
+		return null;
+	}
+
+	public final static String stringSha(final Path filePathIn)
+	{
+		return FileUtils.stringSha(filePathIn.toFile());
 	}
 
 	// Write methods

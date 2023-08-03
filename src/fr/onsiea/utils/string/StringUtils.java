@@ -36,8 +36,75 @@
  */
 package fr.onsiea.utils.string;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 public class StringUtils
 {
+	/**
+	 * Interpret bytesIn and convert to string from UTF_8 Charset
+	 *
+	 * @author Seynax
+	 * @param bytesIn
+	 * @return converted string from bytesIn
+	 */
+	public final static StringBuilder toStringBuilder(final byte[] bytesIn)
+	{
+		return new StringBuilder(StringUtils.toString(bytesIn));
+	}
+
+	/**
+	 * @author Seynax
+	 * @param bytesIn
+	 * @return raw string builder from bytesIn
+	 */
+	public final static StringBuilder toRawStringBuilder(final byte[] bytesIn)
+	{
+		final var stringBuilder = new StringBuilder();
+
+		for (final var b : bytesIn)
+		{
+			stringBuilder.append(b);
+		}
+
+		return stringBuilder;
+	}
+
+	/**
+	 * Interpret bytesIn and convert to string from UTF_8 Charset
+	 *
+	 * @author Seynax
+	 * @param bytesIn
+	 * @return converted string from bytesIn
+	 */
+	public final static String toString(final byte[] bytesIn)
+	{
+		return new String(bytesIn, StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * Interpret bytesIn and convert to string from charsetIn Charset
+	 *
+	 * @author Seynax
+	 * @param bytesIn
+	 * @param charsetIn
+	 * @return converted string from bytesIn
+	 */
+	public final static String toString(final byte[] bytesIn, final Charset charsetIn)
+	{
+		return new String(bytesIn, charsetIn);
+	}
+
+	/**
+	 * @author Seynax
+	 * @param bytesIn
+	 * @return raw string from bytesIn
+	 */
+	public final static String toRawString(final byte[] bytesIn)
+	{
+		return StringUtils.toStringBuilder(bytesIn).toString();
+	}
+
 	public final static String removeUnusedBlanks(final String contentIn)
 	{
 		return contentIn.replaceAll("^\s+", "").replaceAll("\s+$", "");
