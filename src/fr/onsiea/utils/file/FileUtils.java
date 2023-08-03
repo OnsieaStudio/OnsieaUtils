@@ -37,13 +37,16 @@
 package fr.onsiea.utils.file;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -292,16 +295,7 @@ public class FileUtils
 	 */
 	public final static byte[] bytes(final Path pathIn)
 	{
-		try
-		{
-			return Files.readAllBytes(pathIn);
-		}
-		catch (final IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		return null;
+		return FileUtils.bytes(pathIn.toFile());
 	}
 
 	/**
@@ -344,16 +338,7 @@ public class FileUtils
 	 */
 	public final static String content(final Path pathIn)
 	{
-		try
-		{
-			return new String(Files.readAllBytes(pathIn), StandardCharsets.UTF_8);
-		}
-		catch (final IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		return null;
+		return FileUtils.content(pathIn.toFile());
 	}
 
 	/**
@@ -401,16 +386,7 @@ public class FileUtils
 	 */
 	public final static String content(final Path pathIn, final Charset charsetIn)
 	{
-		try
-		{
-			return new String(Files.readAllBytes(pathIn), charsetIn);
-		}
-		catch (final IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		return null;
+		return FileUtils.content(pathIn.toFile(), charsetIn);
 	}
 
 	/**
@@ -461,26 +437,11 @@ public class FileUtils
 	 */
 	public final static String contentFromLines(final Path pathIn)
 	{
-		String content = null;
-
-		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
-		{
-			String line;
-			while ((line = bufferedReader.readLine()) != null)
-			{
-				content += line + "\r\n";
-			}
-		}
-		catch (final IOException exception)
-		{
-			exception.printStackTrace();
-		}
-
-		return content;
+		return FileUtils.contentFromLines(pathIn.toFile());
 	}
 
 	/**
-	 * Read line by line file from filePathIn, add line into string with lineSeparatorIn line separator
+	 * Read line by line file from filePathIn, add line with lineSeparatorIn if not null into string
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -493,7 +454,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Read line by line fileIn, add line into string with lineSeparatorIn line separator
+	 * Read line by line fileIn, add line with lineSeparatorIn if not null into string
 	 *
 	 * @author Seynax
 	 * @param fileIn
@@ -509,7 +470,12 @@ public class FileUtils
 			String line;
 			while ((line = bufferedReader.readLine()) != null)
 			{
-				content += line + lineSeparatorIn;
+				content += line;
+
+				if (lineSeparatorIn != null)
+				{
+					content += lineSeparatorIn;
+				}
 			}
 		}
 		catch (final IOException exception)
@@ -521,7 +487,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Read line by line file from pathIn, add line into string with lineSeparatorIn line separator
+	 * Read line by line file from pathIn, add line with lineSeparatorIn if not null into string
 	 *
 	 * @author Seynax
 	 * @param pathIn
@@ -530,22 +496,7 @@ public class FileUtils
 	 */
 	public final static String contentFromLines(final Path pathIn, final String lineSeparatorIn)
 	{
-		String content = null;
-
-		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
-		{
-			String line;
-			while ((line = bufferedReader.readLine()) != null)
-			{
-				content += line + lineSeparatorIn;
-			}
-		}
-		catch (final IOException exception)
-		{
-			exception.printStackTrace();
-		}
-
-		return content;
+		return FileUtils.contentFromLines(pathIn.toFile(), lineSeparatorIn);
 	}
 
 	/**
@@ -591,23 +542,7 @@ public class FileUtils
 	 */
 	public final static Collection<String> lines(final Path pathIn)
 	{
-		List<String> lines = null;
-
-		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
-		{
-			lines = new ArrayList<>();
-			String line;
-			while ((line = bufferedReader.readLine()) != null)
-			{
-				lines.add(line);
-			}
-		}
-		catch (final IOException exception)
-		{
-			exception.printStackTrace();
-		}
-
-		return lines;
+		return FileUtils.lines(pathIn.toFile());
 	}
 
 	/**
@@ -654,18 +589,7 @@ public class FileUtils
 	 */
 	public final static void forEachLines(final Path pathIn, final IIFunction<String> functionIn)
 	{
-		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
-		{
-			String line;
-			while ((line = bufferedReader.readLine()) != null)
-			{
-				functionIn.execute(line);
-			}
-		}
-		catch (final IOException exception)
-		{
-			exception.printStackTrace();
-		}
+		FileUtils.forEachLines(pathIn.toFile(), functionIn);
 	}
 
 	/**
@@ -720,22 +644,260 @@ public class FileUtils
 	 */
 	public final static List<String> forEachLinesAndAdd(final Path pathIn, final IOIFunction<String, String> functionIn)
 	{
-		List<String> lines = null;
+		return FileUtils.forEachLinesAndAdd(pathIn.toFile(), functionIn);
+	}
 
-		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
+	// Write methods
+
+	/**
+	 * Write all bytes from bytesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void write(final String filePathIn, final byte[] bytesIn) throws IOException
+	{
+		FileUtils.write(Paths.get(filePathIn), bytesIn);
+	}
+
+	/**
+	 * Write all bytes from bytesIn into fileIn
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void write(final File fileIn, final byte[] bytesIn) throws IOException
+	{
+		FileUtils.write(fileIn.toPath(), bytesIn);
+	}
+
+	/**
+	 * Write all bytes from bytesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void write(final Path filePathIn, final byte[] bytesIn) throws IOException
+	{
+		if (Files.exists(filePathIn))
 		{
-			lines = new ArrayList<>();
-			String line;
-			while ((line = bufferedReader.readLine()) != null)
+			throw new IOException("[ERROR] Cannot write in \"" + filePathIn + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+		}
+
+		Files.write(filePathIn, bytesIn);
+	}
+
+	/**
+	 * Write all chars from charsIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void write(final String filePathIn, final char[] charsIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), charsIn);
+	}
+
+	/**
+	 * Write all chars from charsIn into fileIn
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void write(final File fileIn, final char[] charsIn) throws IOException
+	{
+		if (fileIn.exists())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(charsIn);
+		}
+	}
+
+	/**
+	 * Write all chars from charsIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void write(final Path filePathIn, final char[] charsIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), charsIn);
+	}
+
+	/**
+	 * Write String content from contentIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void write(final String filePathIn, final String contentIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), contentIn);
+	}
+
+	/**
+	 * Write String content from contentIn into fileIn
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void write(final File fileIn, final String contentIn) throws IOException
+	{
+		if (fileIn.exists())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(contentIn);
+		}
+	}
+
+	/**
+	 * Write String content from contentIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void write(final Path filePathIn, final String contentIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), contentIn);
+	}
+
+	/**
+	 * Write all lines separated by "\r\n" from linesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void write(final String filePathIn, final List<String> linesIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), linesIn);
+	}
+
+	/**
+	 * Write all lines separated by "\r\n" from linesIn into fileIn
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void write(final File fileIn, final List<String> linesIn) throws IOException
+	{
+		if (fileIn.exists())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(line).append("\r\n");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines separated by "\r\n" from linesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void write(final Path filePathIn, final List<String> linesIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), linesIn);
+	}
+
+	/**
+	 * Write all lines separated by lineSeparatorIn from linesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void write(final String filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), linesIn, lineSeparatorIn);
+	}
+
+	/**
+	 * Write all lines separated by lineSeparatorIn from linesIn into fileIn
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void write(final File fileIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		if (fileIn.exists())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(line);
+
+			if (lineSeparatorIn != null)
 			{
-				lines.add(functionIn.execute(line));
+				content.append(lineSeparatorIn);
 			}
 		}
-		catch (final IOException exception)
-		{
-			exception.printStackTrace();
-		}
 
-		return lines;
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines separated by lineSeparatorIn from linesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void write(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
 	}
 }
