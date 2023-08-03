@@ -1703,7 +1703,7 @@ public class FileUtils
 
 		if (Files.exists(destinationPathIn))
 		{
-			Files.delete(destinationPathIn);
+			FileUtils.delete(destinationPathIn);
 		}
 
 		final var parent = destinationPathIn.getParent();
@@ -1780,7 +1780,7 @@ public class FileUtils
 
 		if (Files.exists(destinationPathIn))
 		{
-			Files.delete(destinationPathIn);
+			FileUtils.delete(destinationPathIn);
 		}
 
 		final var parent = destinationPathIn.getParent();
