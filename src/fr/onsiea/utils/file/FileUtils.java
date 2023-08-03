@@ -656,11 +656,23 @@ public class FileUtils
 
 	// SHA methods
 
+	/**
+	 * @author Seynax
+	 * @param filePathIn
+	 * @return sha of file from filePathIn
+	 * @throws IOException
+	 */
 	public final static byte[] sha(final String filePathIn) throws IOException
 	{
 		return FileUtils.sha(new File(filePathIn));
 	}
 
+	/**
+	 * @author Seynax
+	 * @param fileIn
+	 * @return sha of fileIn
+	 * @throws IOException
+	 */
 	public final static byte[] sha(final File fileIn) throws IOException
 	{
 		if (fileIn.isDirectory())
@@ -699,16 +711,34 @@ public class FileUtils
 		return null;
 	}
 
+	/**
+	 * @author Seynax
+	 * @param filePathIn
+	 * @return sha of file from filePathIn
+	 * @throws IOException
+	 */
 	public final static byte[] sha(final Path filePathIn) throws IOException
 	{
 		return FileUtils.sha(filePathIn.toFile());
 	}
 
+	/**
+	 * @author Seynax
+	 * @param filePathIn
+	 * @return raw string from sha of file from filePathIn
+	 * @throws IOException
+	 */
 	public final static String stringSHA(final String filePathIn) throws IOException
 	{
 		return FileUtils.stringSHA(new File(filePathIn));
 	}
 
+	/**
+	 * @author Seynax
+	 * @param fileIn
+	 * @return raw string from sha of fileIn
+	 * @throws IOException
+	 */
 	public final static String stringSHA(final File fileIn) throws IOException
 	{
 		final var sha = FileUtils.sha(fileIn);
@@ -721,6 +751,12 @@ public class FileUtils
 		return null;
 	}
 
+	/**
+	 * @author Seynax
+	 * @param filePathIn
+	 * @return raw string from sha of file from filePathIn
+	 * @throws IOException
+	 */
 	public final static String stringSHA(final Path filePathIn) throws IOException
 	{
 		return FileUtils.stringSHA(filePathIn.toFile());
