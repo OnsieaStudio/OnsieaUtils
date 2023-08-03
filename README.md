@@ -1,2 +1,2 @@
 # OnsieaUtils
-Common sources used by all Onsiea projects (FileUtils, FileShaUtils etc)
+Common sources used by all Onsiea projects (FileUtils, StringUtils etc)
