@@ -1196,6 +1196,127 @@ public class FileUtils
 	{
 		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
 	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void writeEdit(final String filePathIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.writeEdit(new File(filePathIn), linesIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into fileIn
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void writeEdit(final File fileIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		if (fileIn.exists())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(filterFunctionIn.execute(line)).append("\r\n");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void writeEdit(final Path filePathIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.writeEdit(filePathIn.toFile(), linesIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void writeEdit(final String filePathIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.writeEdit(new File(filePathIn), linesIn, lineSeparatorIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into fileIn
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void writeEdit(final File fileIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		if (fileIn.exists())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(filterFunctionIn.execute(line));
+
+			if (lineSeparatorIn != null)
+			{
+				content.append(lineSeparatorIn);
+			}
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into file from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void writeEdit(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.writeEdit(filePathIn.toFile(), linesIn, lineSeparatorIn, filterFunctionIn);
+	}
+
 	// Append methods
 
 	/**
@@ -1465,11 +1586,137 @@ public class FileUtils
 		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
 	}
 
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void appendEdit(final String filePathIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.appendEdit(new File(filePathIn), linesIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into fileIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void appendEdit(final File fileIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(filterFunctionIn.execute(line)).append("\r\n");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void appendEdit(final Path filePathIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.appendEdit(filePathIn.toFile(), linesIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void appendEdit(final String filePathIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.appendEdit(new File(filePathIn), linesIn, lineSeparatorIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into fileIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void appendEdit(final File fileIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(filterFunctionIn.execute(line));
+
+			if (lineSeparatorIn != null)
+			{
+				content.append(lineSeparatorIn);
+			}
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void appendEdit(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.appendEdit(filePathIn.toFile(), linesIn, lineSeparatorIn, filterFunctionIn);
+	}
+
 	// Replace methods
 
 	/**
 	 * Write all bytes from bytesIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1483,7 +1730,7 @@ public class FileUtils
 
 	/**
 	 * Write all bytes from bytesIn into fileIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param fileIn
@@ -1497,7 +1744,7 @@ public class FileUtils
 
 	/**
 	 * Write all bytes from bytesIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1516,7 +1763,7 @@ public class FileUtils
 
 	/**
 	 * Write all chars from charsIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1530,7 +1777,7 @@ public class FileUtils
 
 	/**
 	 * Write all chars from charsIn into fileIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param fileIn
@@ -1552,7 +1799,7 @@ public class FileUtils
 
 	/**
 	 * Write all chars from charsIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1566,7 +1813,7 @@ public class FileUtils
 
 	/**
 	 * Write String content from contentIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1580,7 +1827,7 @@ public class FileUtils
 
 	/**
 	 * Write String content from contentIn into fileIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param fileIn
@@ -1602,7 +1849,7 @@ public class FileUtils
 
 	/**
 	 * Write String content from contentIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1616,7 +1863,7 @@ public class FileUtils
 
 	/**
 	 * Write all lines separated by "\r\n" from linesIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1630,7 +1877,7 @@ public class FileUtils
 
 	/**
 	 * Write all lines separated by "\r\n" from linesIn into fileIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param fileIn
@@ -1658,7 +1905,7 @@ public class FileUtils
 
 	/**
 	 * Write all lines separated by "\r\n" from linesIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1672,7 +1919,7 @@ public class FileUtils
 
 	/**
 	 * Write all lines separated by lineSeparatorIn from linesIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1687,7 +1934,7 @@ public class FileUtils
 
 	/**
 	 * Write all lines separated by lineSeparatorIn from linesIn into fileIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param fileIn
@@ -1721,7 +1968,7 @@ public class FileUtils
 
 	/**
 	 * Write all lines separated by lineSeparatorIn from linesIn into file from filePathIn<br>
-	 * ATTENTION ! Content of file is replaced with this methods.
+	 * ATTENTION ! Content of file is replaced with this method.
 	 *
 	 * @author Seynax
 	 * @param filePathIn
@@ -1732,6 +1979,132 @@ public class FileUtils
 	public final static void replace(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
 	{
 		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this method.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void replaceByEdit(final String filePathIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.replaceByEdit(new File(filePathIn), linesIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into fileIn<br>
+	 * ATTENTION ! Content of file is replaced with this method.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void replaceByEdit(final File fileIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(filterFunctionIn.execute(line)).append("\r\n");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by "\r\n" from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this method.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void replaceByEdit(final Path filePathIn, final List<String> linesIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.replaceByEdit(filePathIn.toFile(), linesIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this method.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void replaceByEdit(final String filePathIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.replaceByEdit(new File(filePathIn), linesIn, lineSeparatorIn, filterFunctionIn);
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into fileIn<br>
+	 * ATTENTION ! Content of file is replaced with this method.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void replaceByEdit(final File fileIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(filterFunctionIn.execute(line));
+
+			if (lineSeparatorIn != null)
+			{
+				content.append(lineSeparatorIn);
+			}
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines returned by filterFunctionIn method separated by lineSeparatorIn from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this method.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @param filterFunctionIn
+	 * @throws IOException
+	 */
+	public final static void replaceByEdit(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn) throws IOException
+	{
+		FileUtils.replaceByEdit(filePathIn.toFile(), linesIn, lineSeparatorIn, filterFunctionIn);
 	}
 
 	// Copy methods
