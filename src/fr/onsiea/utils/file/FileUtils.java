@@ -66,6 +66,463 @@ import fr.onsiea.utils.string.StringUtils;
  */
 public class FileUtils
 {
+	// Recursively methods
+
+	/**
+	 * Execute functionIn method with all files (not directories) from filesPathIn
+	 *
+	 * @author Seynax
+	 * @param functionIn
+	 * @param filesPathIn
+	 */
+	public final static void recursively(final IIFunction<File> functionIn, final String... filesPathIn)
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var file = new File(filePath);
+
+			if (file.isFile())
+			{
+				functionIn.execute(file);
+			}
+			else
+			{
+				FileUtils.recursively(functionIn, file);
+			}
+		}
+	}
+
+	/**
+	 * Execute functionIn method with all files (not directories) from filesIn
+	 *
+	 * @author Seynax
+	 * @param functionIn
+	 * @param filesIn
+	 */
+	public final static void recursively(final IIFunction<File> functionIn, final File... filesIn)
+	{
+		for (final var file : filesIn)
+		{
+			if (file.isFile())
+			{
+				functionIn.execute(file);
+			}
+			else
+			{
+				FileUtils.recursively(functionIn, file);
+			}
+		}
+	}
+
+	/**
+	 * Execute functionIn method with all files (not directories) from filesPathIn
+	 *
+	 * @author Seynax
+	 * @param functionIn
+	 * @param filesPathIn
+	 */
+	public final static void recursively(final IIFunction<File> functionIn, final Path... filesPathIn)
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var file = filePath.toFile();
+
+			if (file.isFile())
+			{
+				functionIn.execute(file);
+			}
+			else
+			{
+				FileUtils.recursively(functionIn, file);
+			}
+		}
+	}
+
+	/**
+	 * Execute functionIn method with all files (not directories) filtered by filterFunctionIn from filesPathIn
+	 *
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param functionIn
+	 * @param filesPathIn
+	 */
+	public final static void recursively(final IOIFunction<Boolean, File> filterFunctionIn, final IIFunction<File> functionIn, final String... filesPathIn)
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var file = new File(filePath);
+
+			if (file.isFile())
+			{
+				if (filterFunctionIn.execute(file))
+				{
+					functionIn.execute(file);
+				}
+				else
+				{
+					FileUtils.recursively(functionIn, file);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Execute functionIn method with all files (not directories) filtered by filterFunctionIn from filesPathIn
+	 *
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param functionIn
+	 * @param filesIn
+	 */
+	public final static void recursively(final IOIFunction<Boolean, File> filterFunctionIn, final IIFunction<File> functionIn, final File... filesIn)
+	{
+		for (final var file : filesIn)
+		{
+			if (file.isFile())
+			{
+				if (filterFunctionIn.execute(file))
+				{
+					functionIn.execute(file);
+				}
+				else
+				{
+					FileUtils.recursively(functionIn, file);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Execute functionIn method with all files (not directories) filtered by filterFunctionIn from filesPathIn
+	 *
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param functionIn
+	 * @param filesPathIn
+	 */
+	public final static void recursively(final IOIFunction<Boolean, File> filterFunctionIn, final IIFunction<File> functionIn, final Path... filesPathIn)
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var file = filePath.toFile();
+
+			if (file.isFile())
+			{
+				if (filterFunctionIn.execute(file))
+				{
+					functionIn.execute(file);
+				}
+				else
+				{
+					FileUtils.recursively(functionIn, file);
+				}
+			}
+		}
+	}
+	// Get
+
+	/**
+	 * @author Seynax
+	 * @param filesPathIn
+	 * @return all files (not directories) recursively from filesPathIn
+	 */
+	public final static List<File> allFiles(final String... filesPathIn)
+	{
+		final var files = new ArrayList<File>();
+
+		for (final var filePath : filesPathIn)
+		{
+			FileUtils.allFiles(files, filePath);
+		}
+
+		return files;
+	}
+
+	/**
+	 * @author Seynax
+	 * @param filesIn
+	 * @return all files (not directories) recursively from filesIn
+	 */
+	public final static List<File> allFiles(final File... filesIn)
+	{
+		final var files = new ArrayList<File>();
+
+		for (final var file : filesIn)
+		{
+			FileUtils.allFiles(files, file);
+		}
+
+		return files;
+	}
+
+	/**
+	 * @author Seynax
+	 * @param filesPathIn
+	 * @return all files (not directories) recursively from filesPathIn
+	 */
+	public final static List<File> allFiles(final Path... filesPathIn)
+	{
+		final var files = new ArrayList<File>();
+
+		for (final var filePath : filesPathIn)
+		{
+			FileUtils.allFiles(files, filePath);
+		}
+
+		return files;
+	}
+
+	/**
+	 * Add all files (not directories) recursively from filesPathIn into filesListIn
+	 *
+	 * @author Seynax
+	 * @param filesListIn
+	 * @param filesPathIn
+	 */
+	public final static void allFiles(final List<File> filesListIn, final String... filesPathIn)
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var file = new File(filePath);
+
+			if (file.isFile())
+			{
+				filesListIn.add(file);
+			}
+			else
+			{
+				final var childFiles = file.listFiles();
+
+				if (childFiles != null && childFiles.length > 0)
+				{
+					for (final var childFile : childFiles)
+					{
+						FileUtils.allFiles(filesListIn, childFile);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Add all files (not directories) recursively from filesIn into filesListIn
+	 *
+	 * @author Seynax
+	 * @param filesListIn
+	 * @param filesIn
+	 */
+	public final static void allFiles(final List<File> filesListIn, final File... filesIn)
+	{
+		for (final var file : filesIn)
+		{
+			if (file.isFile())
+			{
+				filesListIn.add(file);
+			}
+			else
+			{
+				final var childFiles = file.listFiles();
+
+				if (childFiles != null && childFiles.length > 0)
+				{
+					for (final var childFile : childFiles)
+					{
+						FileUtils.allFiles(filesListIn, childFile);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Add all files (not directories) recursively from filesPathIn into filesListIn
+	 *
+	 * @author Seynax
+	 * @param filesListIn
+	 * @param filesPathIn
+	 */
+	public final static void allFiles(final List<File> filesListIn, final Path... filesPathIn)
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var file = filePath.toFile();
+			if (file.isFile())
+			{
+				filesListIn.add(file);
+			}
+			else
+			{
+				final var childFiles = file.listFiles();
+
+				if (childFiles != null && childFiles.length > 0)
+				{
+					for (final var childFile : childFiles)
+					{
+						FileUtils.allFiles(filesListIn, childFile);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param filesPathIn
+	 * @return all files (not directories) from filePathsIn filtered by filterFunctionIn
+	 */
+	public final static List<File> get(final IOIFunction<Boolean, File> filterFunctionIn, final String... filesPathIn)
+	{
+		final var files = new ArrayList<File>();
+
+		for (final var filePath : filesPathIn)
+		{
+			FileUtils.get(filterFunctionIn, files, filePath);
+		}
+
+		return files;
+	}
+
+	/**
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param filesIn
+	 * @return all files (not directories) from filesIn filtered by filterFunctionIn
+	 */
+	public final static List<File> get(final IOIFunction<Boolean, File> filterFunctionIn, final File... filesIn)
+	{
+		final var files = new ArrayList<File>();
+
+		for (final var file : filesIn)
+		{
+			FileUtils.get(filterFunctionIn, files, file);
+		}
+
+		return files;
+	}
+
+	/**
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param filePathsIn
+	 * @return all files (not directories) from filePathsIn filtered by filterFunctionIn
+	 */
+	public final static List<File> get(final IOIFunction<Boolean, File> filterFunctionIn, final Path... filePathsIn)
+	{
+		final var files = new ArrayList<File>();
+
+		for (final var filePath : filePathsIn)
+		{
+			FileUtils.get(filterFunctionIn, files, filePath);
+		}
+
+		return files;
+	}
+
+	/**
+	 * Add all filtered files (not directories) by filterFunctionIn from filesPathIn into filesListIn
+	 *
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param filesListIn
+	 * @param filesPathIn
+	 */
+	public final static void get(final IOIFunction<Boolean, File> filterFunctionIn, final List<File> filesListIn, final String... filesPathIn)
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var file = new File(filePath);
+			if (file.isFile())
+			{
+				if (filterFunctionIn.execute(file))
+				{
+					filesListIn.add(file);
+				}
+			}
+			else
+			{
+				final var childFiles = file.listFiles();
+
+				if (childFiles != null && childFiles.length > 0)
+				{
+					for (final var childFile : childFiles)
+					{
+						FileUtils.get(filterFunctionIn, filesListIn, childFile);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Add all filtered files (not directories) by filterFunctionIn from filesIn into filesListIn
+	 *
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param filesListIn
+	 * @param filesIn
+	 */
+	public final static void get(final IOIFunction<Boolean, File> filterFunctionIn, final List<File> filesListIn, final File... filesIn)
+	{
+		for (final var file : filesIn)
+		{
+			if (file.isFile())
+			{
+				if (filterFunctionIn.execute(file))
+				{
+					filesListIn.add(file);
+				}
+			}
+			else
+			{
+				final var childFiles = file.listFiles();
+
+				if (childFiles != null && childFiles.length > 0)
+				{
+					for (final var childFile : childFiles)
+					{
+						FileUtils.get(filterFunctionIn, filesListIn, childFile);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Add all filtered files (not directories) by filterFunctionIn from filesPathIn into filesListIn
+	 *
+	 * @author Seynax
+	 * @param filterFunctionIn
+	 * @param filesListIn
+	 * @param filesPathIn
+	 */
+	public final static void get(final IOIFunction<Boolean, File> filterFunctionIn, final List<File> filesListIn, final Path... filesPathIn)
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var file = filePath.toFile();
+			if (file.isFile())
+			{
+				if (filterFunctionIn.execute(file))
+				{
+					filesListIn.add(file);
+				}
+			}
+			else
+			{
+				final var childFiles = file.listFiles();
+
+				if (childFiles != null && childFiles.length > 0)
+				{
+					for (final var childFile : childFiles)
+					{
+						FileUtils.get(filterFunctionIn, filesListIn, childFile);
+					}
+				}
+			}
+		}
+	}
+
 	// Create directory and file methods
 
 	/**
