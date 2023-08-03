@@ -47,6 +47,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -897,6 +898,274 @@ public class FileUtils
 	 * @throws IOException
 	 */
 	public final static void write(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
+	}
+	// Append methods
+
+	/**
+	 * Append all bytes from bytesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void append(final String filePathIn, final byte[] bytesIn) throws IOException
+	{
+		FileUtils.write(Paths.get(filePathIn), bytesIn);
+	}
+
+	/**
+	 * Append all bytes from bytesIn into fileIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void append(final File fileIn, final byte[] bytesIn) throws IOException
+	{
+		FileUtils.write(fileIn.toPath(), bytesIn);
+	}
+
+	/**
+	 * Append all bytes from bytesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void append(final Path filePathIn, final byte[] bytesIn) throws IOException
+	{
+		if (Files.exists(filePathIn) && Files.isDirectory(filePathIn))
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + filePathIn + "\" because file exists and is directory !");
+		}
+
+		Files.write(filePathIn, bytesIn, StandardOpenOption.APPEND);
+	}
+
+	/**
+	 * Append all chars from charsIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void append(final String filePathIn, final char[] charsIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), charsIn);
+	}
+
+	/**
+	 * Append all chars from charsIn into fileIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void append(final File fileIn, final char[] charsIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn, true)))
+		{
+			bufferedWriter.write(charsIn);
+		}
+	}
+
+	/**
+	 * Append all chars from charsIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void append(final Path filePathIn, final char[] charsIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), charsIn);
+	}
+
+	/**
+	 * Append String content from contentIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void append(final String filePathIn, final String contentIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), contentIn);
+	}
+
+	/**
+	 * Append String content from contentIn into fileIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void append(final File fileIn, final String contentIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn, true)))
+		{
+			bufferedWriter.write(contentIn);
+		}
+	}
+
+	/**
+	 * Append String content from contentIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void append(final Path filePathIn, final String contentIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), contentIn);
+	}
+
+	/**
+	 * Append all lines separated by "\r\n" from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void append(final String filePathIn, final List<String> linesIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), linesIn);
+	}
+
+	/**
+	 * Append all lines separated by "\r\n" from linesIn into fileIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void append(final File fileIn, final List<String> linesIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(line).append("\r\n");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn, true)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Append all lines separated by "\r\n" from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void append(final Path filePathIn, final List<String> linesIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), linesIn);
+	}
+
+	/**
+	 * Append all lines separated by lineSeparatorIn from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void append(final String filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), linesIn, lineSeparatorIn);
+	}
+
+	/**
+	 * Append all lines separated by lineSeparatorIn from linesIn into fileIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void append(final File fileIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(line);
+
+			if (lineSeparatorIn != null)
+			{
+				content.append(lineSeparatorIn);
+			}
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn, true)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Append all lines separated by lineSeparatorIn from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content is added after existing content in file.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void append(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
 	{
 		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
 	}
