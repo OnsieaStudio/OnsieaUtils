@@ -54,6 +54,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import fr.onsiea.utils.function.IIFunction;
@@ -1666,5 +1667,193 @@ public class FileUtils
 				e.printStackTrace();
 			}
 		});
+	}
+
+	// Delete methods
+
+	/**
+	 * Delete file (file or directory) from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @throws IOException
+	 */
+	public final static void delete(final String filePathIn) throws IOException
+	{
+		FileUtils.delete(Paths.get(filePathIn));
+	}
+
+	/**
+	 * Delete fileIn (file or directory)
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @throws IOException
+	 */
+	public final static void delete(final File fileIn) throws IOException
+	{
+		FileUtils.delete(fileIn.toPath());
+	}
+
+	/**
+	 * Delete file (file or directory) from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @throws IOException
+	 */
+	public final static void delete(final Path filePathIn) throws IOException
+	{
+		if (!Files.exists(filePathIn))
+		{
+			throw new IOException("[ERROR] Cannot remove \"" + filePathIn.toString() + "\" because not exists !");
+		}
+
+		if (Files.isDirectory(filePathIn))
+		{
+			Files.walk(filePathIn).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		}
+		else
+		{
+			Files.delete(filePathIn);
+		}
+	}
+
+	/**
+	 * Delete directory from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @throws IOException
+	 */
+	public final static void deleteDirectory(final String filePathIn) throws IOException
+	{
+		FileUtils.deleteDirectory(Paths.get(filePathIn));
+	}
+
+	/**
+	 * Delete fileIn directory
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @throws IOException
+	 */
+	public final static void deleteDirectory(final File fileIn) throws IOException
+	{
+		FileUtils.deleteDirectory(fileIn.toPath());
+	}
+
+	/**
+	 * Delete directory from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @throws IOException
+	 */
+	public final static void deleteDirectory(final Path filePathIn) throws IOException
+	{
+		if (!Files.exists(filePathIn))
+		{
+			throw new IOException("[ERROR] Cannot remove \"" + filePathIn.toString() + "\" because not exists !");
+		}
+
+		try
+		{
+			Files.walk(filePathIn).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		}
+		catch (final IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Delete all files (file or directory) from filePathIn
+	 *
+	 * @author Seynax
+	 * @param filesPathIn
+	 * @throws IOException
+	 */
+	public final static void deletes(final String... filesPathIn) throws IOException
+	{
+		for (final var filePath : filesPathIn)
+		{
+			FileUtils.delete(Paths.get(filePath));
+		}
+	}
+
+	/**
+	 * Delete all files (file or directory) from filesIn
+	 *
+	 * @author Seynax
+	 * @param filesIn
+	 * @throws IOException
+	 */
+	public final static void deletes(final File... filesIn) throws IOException
+	{
+		for (final var file : filesIn)
+		{
+			FileUtils.delete(file.toPath());
+		}
+	}
+
+	/**
+	 * Delete all files (file or directory) from filesPathIn
+	 *
+	 * @author Seynax
+	 * @param filesPathIn
+	 * @throws IOException
+	 */
+	public final static void deletes(final Path... filesPathIn) throws IOException
+	{
+		for (final var path : filesPathIn)
+		{
+			FileUtils.delete(path);
+		}
+	}
+
+	/**
+	 * Delete all directories from filePathsIn
+	 *
+	 * @author Seynax
+	 * @param filePathsIn
+	 * @throws IOException
+	 */
+	public final static void deleteDirectories(final String... filePathsIn) throws IOException
+	{
+		for (final var path : filePathsIn)
+		{
+			FileUtils.deleteDirectory(Paths.get(path));
+		}
+	}
+
+	/**
+	 * Delete all directories from filesIn
+	 *
+	 * @author Seynax
+	 * @param filesIn
+	 * @throws IOException
+	 */
+	public final static void deleteDirectories(final File... filesIn) throws IOException
+	{
+		for (final var file : filesIn)
+		{
+			FileUtils.deleteDirectory(file.toPath());
+		}
+	}
+
+	/**
+	 * Delete all directories from filesPathIn
+	 *
+	 * @author Seynax
+	 * @param filesPathIn
+	 * @throws IOException
+	 */
+	public final static void deleteDirectories(final Path... filesPathIn) throws IOException
+	{
+		for (final var path : filesPathIn)
+		{
+			FileUtils.deleteDirectory(path);
+		}
 	}
 }
