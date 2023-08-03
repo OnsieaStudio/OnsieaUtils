@@ -1561,6 +1561,12 @@ public class FileUtils
 					"[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + " \"  because destination file/directory already exists ! Use replace(...) method to replace destination file.");
 		}
 
+		final var parent = destinationPathIn.getParent();
+		if (!Files.exists(parent))
+		{
+			Files.createDirectories(parent);
+		}
+
 		if (Files.isDirectory(sourcePathIn))
 		{
 			Files.walk(sourcePathIn).forEach(source ->
@@ -1593,31 +1599,7 @@ public class FileUtils
 	 */
 	public static void copyDirectory(final String sourcePathIn, final String destinationPathIn) throws IOException
 	{
-		final var sourcePath = Paths.get(sourcePathIn);
-		if (!Files.exists(sourcePath))
-		{
-			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn + "\", because source directory not exists !");
-		}
-
-		final var destinationPath = Paths.get(destinationPathIn);
-		if (Files.exists(destinationPath))
-		{
-			throw new IOException("[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
-		}
-
-		Files.walk(sourcePath).forEach(source ->
-		{
-			final var destination = Paths.get(destinationPathIn, sourcePathIn.substring(sourcePathIn.length()));
-
-			try
-			{
-				Files.copy(source, destination);
-			}
-			catch (final IOException e)
-			{
-				e.printStackTrace();
-			}
-		});
+		FileUtils.copyDirectory(Paths.get(sourcePathIn), Paths.get(destinationPathIn));
 	}
 
 	/**
@@ -1652,6 +1634,159 @@ public class FileUtils
 		{
 			throw new IOException(
 					"[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
+		}
+
+		final var parent = destinationPathIn.getParent();
+		if (!Files.exists(parent))
+		{
+			Files.createDirectories(parent);
+		}
+
+		Files.walk(sourcePathIn).forEach(source ->
+		{
+			final var destination = Paths.get(destinationPathIn.toString(), source.toString().substring(sourcePathIn.toString().length()));
+
+			try
+			{
+				Files.copy(source, destination);
+			}
+			catch (final IOException e)
+			{
+				e.printStackTrace();
+			}
+		});
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void replaceFile(final String sourcePathIn, final String destinationPathIn) throws IOException
+	{
+		FileUtils.replaceFile(Paths.get(sourcePathIn), Paths.get(destinationPathIn));
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourceFileIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public final static void replaceFile(final File sourceFileIn, final File destinationFileIn) throws IOException
+	{
+		FileUtils.replaceFile(sourceFileIn.toPath(), destinationFileIn.toPath());
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void replaceFile(final Path sourcePathIn, final Path destinationPathIn) throws IOException
+	{
+		if (!Files.exists(sourcePathIn))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + "\", because source file/directory not exists !");
+		}
+
+		if (Files.exists(destinationPathIn))
+		{
+			Files.delete(destinationPathIn);
+		}
+
+		final var parent = destinationPathIn.getParent();
+		if (!Files.exists(parent))
+		{
+			Files.createDirectories(parent);
+		}
+
+		if (Files.isDirectory(sourcePathIn))
+		{
+			Files.walk(sourcePathIn).forEach(source ->
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), source.toString().substring(sourcePathIn.toString().length()));
+
+				try
+				{
+					Files.copy(source, destination);
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
+				}
+			});
+		}
+		else
+		{
+			Files.copy(sourcePathIn, destinationPathIn);
+		}
+	}
+
+	/**
+	 * Copy all files from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public static void replaceDirectory(final String sourcePathIn, final String destinationPathIn) throws IOException
+	{
+		FileUtils.replaceDirectory(Paths.get(sourcePathIn), Paths.get(destinationPathIn));
+	}
+
+	/**
+	 * Copy all files from sourceIn into destinationIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourceFileIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public static void replaceDirectory(final File sourceFileIn, final File destinationFileIn) throws IOException
+	{
+		FileUtils.replaceDirectory(sourceFileIn.toPath(), destinationFileIn.toPath());
+	}
+
+	/**
+	 * Copy all files from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public static void replaceDirectory(final Path sourcePathIn, final Path destinationPathIn) throws IOException
+	{
+		if (!Files.exists(sourcePathIn))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + "\", because source directory not exists !");
+		}
+
+		if (Files.exists(destinationPathIn))
+		{
+			Files.delete(destinationPathIn);
+		}
+
+		final var parent = destinationPathIn.getParent();
+		if (!Files.exists(parent))
+		{
+			Files.createDirectories(parent);
 		}
 
 		Files.walk(sourcePathIn).forEach(source ->
