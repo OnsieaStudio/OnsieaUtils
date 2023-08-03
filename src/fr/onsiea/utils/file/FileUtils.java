@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -57,9 +58,9 @@ public class FileUtils
 {
 	// Create directory and file methods
 
-	public final static void createDirectory(final String... folderPathsIn) throws IOException
+	public final static void createDirectory(final String... folderPathIn) throws IOException
 	{
-		for (final var path : folderPathsIn)
+		for (final var path : folderPathIn)
 		{
 			final var folder = new File(path);
 
@@ -95,9 +96,29 @@ public class FileUtils
 		}
 	}
 
-	public final static void createFile(final String... filesPathsIn) throws IOException
+	public final static void createDirectory(final Path... foldersPathIn) throws IOException
 	{
-		for (final var path : filesPathsIn)
+		for (final var folderPath : foldersPathIn)
+		{
+			final var folder = folderPath.toFile();
+
+			if (folder.exists())
+			{
+				if (folder.isFile())
+				{
+					throw new IOException("[ERROR] Unable to create folder \"" + folder.getAbsolutePath() + "\", already exists and is file !");
+				}
+			}
+			else if (!folder.mkdirs())
+			{
+				throw new IOException("[ERROR] Unable to create folder \"" + folder.getAbsolutePath() + "\" (File.mkdirs method failed) !");
+			}
+		}
+	}
+
+	public final static void createFile(final String... filesPathIn) throws IOException
+	{
+		for (final var path : filesPathIn)
 		{
 			final var file = new File(path);
 
@@ -159,6 +180,38 @@ public class FileUtils
 		}
 	}
 
+	public final static void createFile(final Path... filesPathIn) throws IOException
+	{
+		for (final var filePath : filesPathIn)
+		{
+			final var	file		= filePath.toFile();
+			final var	parentFile	= file.getParentFile();
+			if (parentFile.exists())
+			{
+				if (parentFile.isFile())
+				{
+					throw new IOException("[ERROR] Unable to create file \"" + file.getName() + "\", into \"" + parentFile.getAbsolutePath() + "\" because parent file isn't directory !");
+				}
+			}
+			else if (!parentFile.mkdirs())
+			{
+				throw new IOException("[ERROR] Unable to create file \"" + file.getName() + "\", into \"" + parentFile.getAbsolutePath() + "\" because failed to create parent directory !");
+			}
+
+			if (file.exists())
+			{
+				if (file.isDirectory())
+				{
+					throw new IOException("[ERROR] Unable to create file \"" + file.getAbsolutePath() + "\", already exists and is directory !");
+				}
+			}
+			else if (!file.createNewFile())
+			{
+				throw new IOException("[ERROR] Unable to create file \"" + file.getAbsolutePath() + "\" (File.createNewFile method failed) !");
+			}
+		}
+	}
+
 	// Read methods
 
 	/**
@@ -181,6 +234,25 @@ public class FileUtils
 		try
 		{
 			return Files.readAllBytes(fileIn.toPath());
+		}
+		catch (final IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * @author Seynax
+	 * @param pathIn
+	 * @return all bytes of file from pathIn
+	 */
+	public final static byte[] bytes(final Path pathIn)
+	{
+		try
+		{
+			return Files.readAllBytes(pathIn);
 		}
 		catch (final IOException e)
 		{
@@ -214,6 +286,25 @@ public class FileUtils
 		try
 		{
 			return new String(Files.readAllBytes(fileIn.toPath()), StandardCharsets.UTF_8);
+		}
+		catch (final IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * @author Seynax
+	 * @param pathIn
+	 * @return string content of file from pathIn
+	 */
+	public final static String content(final Path pathIn)
+	{
+		try
+		{
+			return new String(Files.readAllBytes(pathIn), StandardCharsets.UTF_8);
 		}
 		catch (final IOException e)
 		{
@@ -259,6 +350,28 @@ public class FileUtils
 	}
 
 	/**
+	 * read all bytes of file from pathIn, return converted string from bytes with charsetIn charset
+	 *
+	 * @author Seynax
+	 * @param pathIn
+	 * @param charsetIn
+	 * @return string content of file from pathIn
+	 */
+	public final static String content(final Path pathIn, final Charset charsetIn)
+	{
+		try
+		{
+			return new String(Files.readAllBytes(pathIn), charsetIn);
+		}
+		catch (final IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
 	 * Read line by line file from filePathIn, add line into string with "\r\n" line separator
 	 *
 	 * @author Seynax
@@ -282,6 +395,33 @@ public class FileUtils
 		String content = null;
 
 		try (var bufferedReader = new BufferedReader(new FileReader(fileIn)))
+		{
+			String line;
+			while ((line = bufferedReader.readLine()) != null)
+			{
+				content += line + "\r\n";
+			}
+		}
+		catch (final IOException exception)
+		{
+			exception.printStackTrace();
+		}
+
+		return content;
+	}
+
+	/**
+	 * Read line by line file from pathIn, add line into string with "\r\n" line separator
+	 *
+	 * @author Seynax
+	 * @param pathIn
+	 * @return separated lines string content of file from pathIn
+	 */
+	public final static String contentFromLines(final Path pathIn)
+	{
+		String content = null;
+
+		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
 		{
 			String line;
 			while ((line = bufferedReader.readLine()) != null)
@@ -339,6 +479,34 @@ public class FileUtils
 	}
 
 	/**
+	 * Read line by line file from pathIn, add line into string with lineSeparatorIn line separator
+	 *
+	 * @author Seynax
+	 * @param pathIn
+	 * @param lineSeparatorIn
+	 * @return separated lines string content of file from pathIn
+	 */
+	public final static String contentFromLines(final Path pathIn, final String lineSeparatorIn)
+	{
+		String content = null;
+
+		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
+		{
+			String line;
+			while ((line = bufferedReader.readLine()) != null)
+			{
+				content += line + lineSeparatorIn;
+			}
+		}
+		catch (final IOException exception)
+		{
+			exception.printStackTrace();
+		}
+
+		return content;
+	}
+
+	/**
 	 * @author Seynax
 	 * @param filePathIn
 	 * @return all lines in list of file from filePathIn
@@ -358,6 +526,32 @@ public class FileUtils
 		List<String> lines = null;
 
 		try (var bufferedReader = new BufferedReader(new FileReader(fileIn)))
+		{
+			lines = new ArrayList<>();
+			String line;
+			while ((line = bufferedReader.readLine()) != null)
+			{
+				lines.add(line);
+			}
+		}
+		catch (final IOException exception)
+		{
+			exception.printStackTrace();
+		}
+
+		return lines;
+	}
+
+	/**
+	 * @author Seynax
+	 * @param pathIn
+	 * @return all lines in list of file from pathIn
+	 */
+	public final static Collection<String> lines(final Path pathIn)
+	{
+		List<String> lines = null;
+
+		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
 		{
 			lines = new ArrayList<>();
 			String line;
@@ -410,6 +604,29 @@ public class FileUtils
 	}
 
 	/**
+	 * Execute functionIn.execute(String lineIn) for all lines of file from pathIn
+	 *
+	 * @author Seynax
+	 * @param pathIn
+	 * @param functionIn
+	 */
+	public final static void forEachLines(final Path pathIn, final IIFunction<String> functionIn)
+	{
+		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
+		{
+			String line;
+			while ((line = bufferedReader.readLine()) != null)
+			{
+				functionIn.execute(line);
+			}
+		}
+		catch (final IOException exception)
+		{
+			exception.printStackTrace();
+		}
+	}
+
+	/**
 	 * Execute functionIn.execute(String lineIn) for all lines of file from filePathIn and place String return result into list
 	 *
 	 * @author Seynax
@@ -423,7 +640,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Execute functionIn.execute(String lineIn) for all lines of fileIn and place String return result into list
+	 * Execute functionIn.execute(String lineIn) for all lines of file from pathIn and place String return result into list
 	 *
 	 * @author Seynax
 	 * @param fileIn
@@ -435,6 +652,35 @@ public class FileUtils
 		List<String> lines = null;
 
 		try (var bufferedReader = new BufferedReader(new FileReader(fileIn)))
+		{
+			lines = new ArrayList<>();
+			String line;
+			while ((line = bufferedReader.readLine()) != null)
+			{
+				lines.add(functionIn.execute(line));
+			}
+		}
+		catch (final IOException exception)
+		{
+			exception.printStackTrace();
+		}
+
+		return lines;
+	}
+
+	/**
+	 * Execute functionIn.execute(String lineIn) for all lines of file from pathIn and place String return result into list
+	 *
+	 * @author Seynax
+	 * @param pathIn
+	 * @param functionIn
+	 * @return list of string results returned by functionIn.execute(String lineIn) method
+	 */
+	public final static List<String> forEachLinesAndAdd(final Path pathIn, final IOIFunction<String, String> functionIn)
+	{
+		List<String> lines = null;
+
+		try (var bufferedReader = new BufferedReader(new FileReader(pathIn.toFile())))
 		{
 			lines = new ArrayList<>();
 			String line;
