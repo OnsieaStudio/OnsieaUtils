@@ -2729,7 +2729,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Copy content from file/directory of sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
+	 * Append content from file/directory of sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
 	 * ATTENTION ! Destination file is replaced if exists !
 	 *
 	 * @author Seynax
@@ -2744,7 +2744,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Copy content from file/directory of sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
+	 * Append content from file/directory of sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
 	 * ATTENTION ! Destination file is replaced if exists !
 	 *
 	 * @author Seynax
@@ -2759,7 +2759,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Copy content from file/directory of sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
+	 * Append content content from file/directory of sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
 	 * ATTENTION ! Destination file is replaced if exists !
 	 *
 	 * @author Seynax
@@ -2826,7 +2826,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Copy all files from sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
+	 * Append all files contents all files from sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
 	 * ATTENTION ! Destination file is replaced if exists !
 	 *
 	 * @author Seynax
@@ -2841,7 +2841,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Copy all files from sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
+	 * Append all files contents all files from sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
 	 * ATTENTION ! Destination file is replaced if exists !
 	 *
 	 * @author Seynax
@@ -2856,7 +2856,7 @@ public class FileUtils
 	}
 
 	/**
-	 * Copy all files from sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
+	 * Append all files contents from sourcePathIn into destinationPathIn by filtering each line of each file by linesFilterFunctionIn<br>
 	 * ATTENTION ! Destination file is replaced if exists !
 	 *
 	 * @author Seynax
