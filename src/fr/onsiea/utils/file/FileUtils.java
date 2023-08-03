@@ -656,13 +656,18 @@ public class FileUtils
 
 	// SHA methods
 
-	public final static byte[] sha(final String filePathIn)
+	public final static byte[] sha(final String filePathIn) throws IOException
 	{
 		return FileUtils.sha(new File(filePathIn));
 	}
 
-	public final static byte[] sha(final File fileIn)
+	public final static byte[] sha(final File fileIn) throws IOException
 	{
+		if (fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot get sha of directory ! \"" + fileIn.getAbsolutePath() + "\"");
+		}
+
 		MessageDigest digest = null;
 
 		try (var fis = new FileInputStream(fileIn))
@@ -694,17 +699,17 @@ public class FileUtils
 		return null;
 	}
 
-	public final static byte[] sha(final Path filePathIn)
+	public final static byte[] sha(final Path filePathIn) throws IOException
 	{
 		return FileUtils.sha(filePathIn.toFile());
 	}
 
-	public final static String stringSha(final String filePathIn)
+	public final static String stringSHA(final String filePathIn) throws IOException
 	{
-		return FileUtils.stringSha(new File(filePathIn));
+		return FileUtils.stringSHA(new File(filePathIn));
 	}
 
-	public final static String stringSha(final File fileIn)
+	public final static String stringSHA(final File fileIn) throws IOException
 	{
 		final var sha = FileUtils.sha(fileIn);
 
@@ -716,9 +721,190 @@ public class FileUtils
 		return null;
 	}
 
-	public final static String stringSha(final Path filePathIn)
+	public final static String stringSHA(final Path filePathIn) throws IOException
 	{
-		return FileUtils.stringSha(filePathIn.toFile());
+		return FileUtils.stringSHA(filePathIn.toFile());
+	}
+
+	// Compare methods
+
+	/**
+	 * @author Seynax
+	 * @param fromFilePathIn
+	 * @param toFilePathIn
+	 * @return true only if files absolute paths (from fromFilePathIn and toFilePathIn) are exactly same (if fromFile is toFile)
+	 * @throws IOException
+	 */
+	public final static boolean is(final String fromFilePathIn, final String toFilePathIn) throws IOException
+	{
+		return FileUtils.is(new File(fromFilePathIn), new File(toFilePathIn));
+	}
+
+	/**
+	 * @author Seynax
+	 * @param fromFileIn
+	 * @param toFileIn
+	 * @return true only if files absolute paths (from fromFileIn and toFileIn) are exactly same (if fromFile is toFile)
+	 * @throws IOException
+	 */
+	public final static boolean is(final File fromFileIn, final File toFileIn) throws IOException
+	{
+		return fromFileIn.getAbsolutePath().contentEquals(toFileIn.getAbsolutePath());
+	}
+
+	/**
+	 * @author Seynax
+	 * @param fromFilePathIn
+	 * @param toFilePathIn
+	 * @return true only if files absolute paths (from fromFilePathIn and toFilePathIn) are exactly same (if fromFile is toFile)
+	 * @throws IOException
+	 */
+	public final static boolean is(final Path fromFilePathIn, final Path toFilePathIn) throws IOException
+	{
+		return fromFilePathIn.toAbsolutePath().toString().contentEquals(toFilePathIn.toAbsolutePath().toString());
+	}
+
+	/**
+	 * @author Seynax
+	 * @param fromFilePathIn
+	 * @param toFilePathIn
+	 * @return true only if files (from fromFilePathIn and toFilePathIn) are same length
+	 * @throws IOException
+	 */
+	public final static boolean sameLength(final String fromFilePathIn, final String toFilePathIn) throws IOException
+	{
+		return FileUtils.sameLength(new File(fromFilePathIn), new File(toFilePathIn));
+	}
+
+	/**
+	 * @author Seynax
+	 * @param fromFileIn
+	 * @param toFileIn
+	 * @return true only if files (from fromFileIn and toFileIn) are same length
+	 * @throws IOException
+	 */
+	public final static boolean sameLength(final File fromFileIn, final File toFileIn) throws IOException
+	{
+		return fromFileIn.length() == toFileIn.length();
+	}
+
+	/**
+	 * @author Seynax
+	 * @param fromFilePathIn
+	 * @param toFilePathIn
+	 * @return true only if files (from fromFilePathIn and toFilePathIn) are same length
+	 * @throws IOException
+	 */
+	public final static boolean sameLength(final Path fromFilePathIn, final Path toFilePathIn) throws IOException
+	{
+		return FileUtils.sameLength(fromFilePathIn.toFile(), toFilePathIn.toFile());
+	}
+
+	/**
+	 * @author Seynax
+	 * @param fromFilePathIn
+	 * @param toFilePathIn
+	 * @return true only if files/directories (from fromFilePathIn and toFilePathIn) are same contents (type[directory/file], length, sha)
+	 * @throws IOException
+	 */
+	public final static boolean sameContent(final String fromFilePathIn, final String toFilePathIn) throws IOException
+	{
+		return FileUtils.sameContent(new File(fromFilePathIn), new File(toFilePathIn));
+	}
+
+	/**
+	 * @author Seynax
+	 * @param fromFileIn
+	 * @param toFileIn
+	 * @return true only if files/directories (from fromFileIn and toFileIn) are same contents (type[directory/file], length, sha)
+	 * @throws IOException
+	 */
+	public final static boolean sameContent(final File fromFileIn, final File toFileIn) throws IOException
+	{
+		if (!fromFileIn.exists())
+		{
+			throw new FileNotFoundException("[ERROR] Cannot compare files because \"" + fromFileIn.getAbsolutePath() + "\" not exists ! (\"" + fromFileIn.getAbsolutePath() + " <=> " + toFileIn.getAbsolutePath() + "\")");
+		}
+		if (!toFileIn.exists())
+		{
+			throw new FileNotFoundException("[ERROR] Cannot compare files because \"" + toFileIn.getAbsolutePath() + "\" not exists ! (\"" + fromFileIn.getAbsolutePath() + " <=> " + toFileIn.getAbsolutePath() + "\")");
+		}
+
+		if (fromFileIn.getAbsolutePath().contentEquals(toFileIn.getAbsolutePath()))
+		{
+			return true;
+		}
+
+		if (fromFileIn.length() != toFileIn.length())
+		{
+			return false;
+		}
+
+		if (fromFileIn.isDirectory())
+		{
+			if (toFileIn.isDirectory())
+			{
+				final var	fromChildFiles	= fromFileIn.listFiles();
+				final var	toChildFiles	= toFileIn.listFiles();
+
+				if (fromChildFiles == null)
+				{
+					if (toChildFiles == null)
+					{
+						return true;
+					}
+
+					return false;
+				}
+
+				if (fromChildFiles.length != toChildFiles.length)
+				{
+					return false;
+				}
+
+				for (var i = 0; i < fromChildFiles.length; i++)
+				{
+					if (!FileUtils.sameContent(fromChildFiles[i], toChildFiles[i]))
+					{
+						return false;
+					}
+				}
+
+				return true;
+			}
+
+			return false;
+		}
+
+		if (toFileIn.isFile())
+		{
+			final var	fromSHA	= FileUtils.sha(fromFileIn);
+			final var	toSHA	= FileUtils.sha(toFileIn);
+
+			for (var i = 0; i < fromSHA.length; i++)
+			{
+				if (fromSHA[i] != toSHA[i])
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @author Seynax
+	 * @param fromFilePathIn
+	 * @param toFilePathIn
+	 * @return true only if files/directories (from fromFilePathIn and toFilePathIn) are same contents (type[directory/file], length, sha)
+	 * @throws IOException
+	 */
+	public final static boolean sameContent(final Path fromFilePathIn, final Path toFilePathIn) throws IOException
+	{
+		return FileUtils.sameContent(fromFilePathIn.toFile(), toFilePathIn.toFile());
 	}
 
 	// Write methods
