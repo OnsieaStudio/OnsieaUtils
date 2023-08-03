@@ -1522,9 +1522,9 @@ public class FileUtils
 	 * @param destinationPathIn
 	 * @throws IOException
 	 */
-	public final static void copy(final String sourcePathIn, final String destinationPathIn) throws IOException
+	public final static void copyFile(final String sourcePathIn, final String destinationPathIn) throws IOException
 	{
-		FileUtils.copy(Paths.get(sourcePathIn), Paths.get(destinationPathIn));
+		FileUtils.copyFile(Paths.get(sourcePathIn), Paths.get(destinationPathIn));
 	}
 
 	/**
@@ -1535,9 +1535,9 @@ public class FileUtils
 	 * @param destinationFileIn
 	 * @throws IOException
 	 */
-	public final static void copy(final File sourceFileIn, final File destinationFileIn) throws IOException
+	public final static void copyFile(final File sourceFileIn, final File destinationFileIn) throws IOException
 	{
-		FileUtils.copy(sourceFileIn.toPath(), destinationFileIn.toPath());
+		FileUtils.copyFile(sourceFileIn.toPath(), destinationFileIn.toPath());
 	}
 
 	/**
@@ -1548,7 +1548,7 @@ public class FileUtils
 	 * @param destinationPathIn
 	 * @throws IOException
 	 */
-	public final static void copy(final Path sourcePathIn, final Path destinationPathIn) throws IOException
+	public final static void copyFile(final Path sourcePathIn, final Path destinationPathIn) throws IOException
 	{
 		if (!Files.exists(sourcePathIn))
 		{
