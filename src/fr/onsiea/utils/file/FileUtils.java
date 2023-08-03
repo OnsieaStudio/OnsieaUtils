@@ -40,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -64,18 +65,6 @@ import fr.onsiea.utils.string.StringUtils;
  */
 public class FileUtils
 {
-	public final static void main(final String[] argsIn)
-	{
-		final var sha = FileUtils.sha("P:\\Java\\sources\\tools\\ProjectInitializer\\src\\fr\\seynax\\temp\\utils\\file\\FileShaUtils.java");
-		for (final var b : sha)
-		{
-			System.out.print(b);
-		}
-		System.out.println();
-		System.out.println("VS");
-		System.out.println(StringUtils.toRawString(sha));
-	}
-
 	// Create directory and file methods
 
 	/**
@@ -1520,5 +1509,162 @@ public class FileUtils
 	public final static void replace(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
 	{
 		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
+	}
+
+	// Copy methods
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void copy(final String sourcePathIn, final String destinationPathIn) throws IOException
+	{
+		FileUtils.copy(Paths.get(sourcePathIn), Paths.get(destinationPathIn));
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourceFileIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public final static void copy(final File sourceFileIn, final File destinationFileIn) throws IOException
+	{
+		FileUtils.copy(sourceFileIn.toPath(), destinationFileIn.toPath());
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void copy(final Path sourcePathIn, final Path destinationPathIn) throws IOException
+	{
+		if (!Files.exists(sourcePathIn))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + "\", because source file/directory not exists !");
+		}
+
+		if (Files.exists(destinationPathIn))
+		{
+			throw new IOException(
+					"[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + " \"  because destination file/directory already exists ! Use replace(...) method to replace destination file.");
+		}
+
+		if (Files.isDirectory(sourcePathIn))
+		{
+			Files.walk(sourcePathIn).forEach(source ->
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), source.toString().substring(sourcePathIn.toString().length()));
+
+				try
+				{
+					Files.copy(source, destination);
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
+				}
+			});
+		}
+		else
+		{
+			Files.copy(sourcePathIn, destinationPathIn);
+		}
+	}
+
+	/**
+	 * Copy all files from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public static void copyDirectory(final String sourcePathIn, final String destinationPathIn) throws IOException
+	{
+		final var sourcePath = Paths.get(sourcePathIn);
+		if (!Files.exists(sourcePath))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn + "\", because source directory not exists !");
+		}
+
+		final var destinationPath = Paths.get(destinationPathIn);
+		if (Files.exists(destinationPath))
+		{
+			throw new IOException("[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
+		}
+
+		Files.walk(sourcePath).forEach(source ->
+		{
+			final var destination = Paths.get(destinationPathIn, sourcePathIn.substring(sourcePathIn.length()));
+
+			try
+			{
+				Files.copy(source, destination);
+			}
+			catch (final IOException e)
+			{
+				e.printStackTrace();
+			}
+		});
+	}
+
+	/**
+	 * Copy all files from sourceIn into destinationIn
+	 *
+	 * @author Seynax
+	 * @param sourceFileIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public static void copyDirectory(final File sourceFileIn, final File destinationFileIn) throws IOException
+	{
+		FileUtils.copyDirectory(sourceFileIn.toPath(), destinationFileIn.toPath());
+	}
+
+	/**
+	 * Copy all files from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public static void copyDirectory(final Path sourcePathIn, final Path destinationPathIn) throws IOException
+	{
+		if (!Files.exists(sourcePathIn))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + "\", because source directory not exists !");
+		}
+
+		if (Files.exists(destinationPathIn))
+		{
+			throw new IOException(
+					"[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
+		}
+
+		Files.walk(sourcePathIn).forEach(source ->
+		{
+			final var destination = Paths.get(destinationPathIn.toString(), source.toString().substring(sourcePathIn.toString().length()));
+
+			try
+			{
+				Files.copy(source, destination);
+			}
+			catch (final IOException e)
+			{
+				e.printStackTrace();
+			}
+		});
 	}
 }
