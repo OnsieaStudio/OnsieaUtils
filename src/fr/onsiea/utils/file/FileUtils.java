@@ -2399,6 +2399,325 @@ public class FileUtils
 		});
 	}
 
+	// Copy methods with lines filter function
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void copyFile(final String sourcePathIn, final String destinationPathIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		FileUtils.copyFile(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourceFileIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public final static void copyFile(final File sourceFileIn, final File destinationFileIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		FileUtils.copyFile(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void copyFile(final Path sourcePathIn, final Path destinationPathIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		if (!Files.exists(sourcePathIn))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + "\", because source file/directory not exists !");
+		}
+
+		if (Files.exists(destinationPathIn))
+		{
+			throw new IOException(
+					"[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + " \"  because destination file/directory already exists ! Use replace(...) method to replace destination file.");
+		}
+
+		final var parent = destinationPathIn.getParent();
+		if (!Files.exists(parent))
+		{
+			Files.createDirectories(parent);
+		}
+
+		if (Files.isDirectory(sourcePathIn))
+		{
+			Files.walk(sourcePathIn).forEach(source ->
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), source.toString().substring(sourcePathIn.toString().length()));
+
+				try
+				{
+					if (Files.isDirectory(destination))
+					{
+						Files.createDirectory(destination);
+					}
+					else
+					{
+						final var content = new StringBuilder();
+						FileUtils.forEachLines(source, line ->
+						{
+							content.append(line).append("\r\n");
+						});
+						FileUtils.write(destination, content.toString());
+					}
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
+				}
+			});
+		}
+		else
+		{
+			final var content = new StringBuilder();
+			FileUtils.forEachLines(sourcePathIn, line ->
+			{
+				content.append(line).append("\r\n");
+			});
+			FileUtils.write(destinationPathIn, content.toString());
+		}
+	}
+
+	/**
+	 * Copy all files from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public static void copyDirectory(final String sourcePathIn, final String destinationPathIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		FileUtils.copyDirectory(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
+	}
+
+	/**
+	 * Copy all files from sourceIn into destinationIn
+	 *
+	 * @author Seynax
+	 * @param sourceFileIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public static void copyDirectory(final File sourceFileIn, final File destinationFileIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		FileUtils.copyDirectory(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
+	}
+
+	/**
+	 * Copy all files from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public static void copyDirectory(final Path sourcePathIn, final Path destinationPathIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		if (!Files.exists(sourcePathIn))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + "\", because source directory not exists !");
+		}
+
+		if (Files.exists(destinationPathIn))
+		{
+			throw new IOException(
+					"[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
+		}
+
+		final var parent = destinationPathIn.getParent();
+		if (!Files.exists(parent))
+		{
+			Files.createDirectories(parent);
+		}
+
+		Files.walk(sourcePathIn).forEach(source ->
+		{
+			final var destination = Paths.get(destinationPathIn.toString(), source.toString().substring(sourcePathIn.toString().length()));
+
+			try
+			{
+				FileUtils.copyFile(source, destination, linesFilterFunctionIn);
+			}
+			catch (final IOException e)
+			{
+				e.printStackTrace();
+			}
+		});
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void replaceFile(final String sourcePathIn, final String destinationPathIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		FileUtils.replaceFile(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourceFileIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public final static void replaceFile(final File sourceFileIn, final File destinationFileIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		FileUtils.replaceFile(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
+	}
+
+	/**
+	 * Copy file/directory from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void replaceFile(final Path sourcePathIn, final Path destinationPathIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		if (!Files.exists(sourcePathIn))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + "\", because source file/directory not exists !");
+		}
+
+		if (Files.exists(destinationPathIn))
+		{
+			FileUtils.delete(destinationPathIn);
+		}
+
+		final var parent = destinationPathIn.getParent();
+		if (!Files.exists(parent))
+		{
+			Files.createDirectories(parent);
+		}
+
+		if (Files.isDirectory(sourcePathIn))
+		{
+			Files.walk(sourcePathIn).forEach(source ->
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), source.toString().substring(sourcePathIn.toString().length()));
+
+				try
+				{
+					final var content = new StringBuilder();
+					FileUtils.forEachLines(source, line ->
+					{
+						content.append(line).append("\r\n");
+					});
+					FileUtils.write(destination, content.toString());
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
+				}
+			});
+		}
+		else
+		{
+			final var content = new StringBuilder();
+			FileUtils.forEachLines(sourcePathIn, line ->
+			{
+				content.append(line).append("\r\n");
+			});
+			FileUtils.write(destinationPathIn, content.toString());
+		}
+	}
+
+	/**
+	 * Copy all files from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public static void replaceDirectory(final String sourcePathIn, final String destinationPathIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		FileUtils.replaceDirectory(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
+	}
+
+	/**
+	 * Copy all files from sourceIn into destinationIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourceFileIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public static void replaceDirectory(final File sourceFileIn, final File destinationFileIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		FileUtils.replaceDirectory(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
+	}
+
+	/**
+	 * Copy all files from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced if exists !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public static void replaceDirectory(final Path sourcePathIn, final Path destinationPathIn, final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	{
+		if (!Files.exists(sourcePathIn))
+		{
+			throw new FileNotFoundException("[ERROR] Cannot copy \"" + sourcePathIn.toString() + "\" into \"" + destinationPathIn.toString() + "\", because source directory not exists !");
+		}
+
+		if (Files.exists(destinationPathIn))
+		{
+			FileUtils.delete(destinationPathIn);
+		}
+
+		final var parent = destinationPathIn.getParent();
+		if (!Files.exists(parent))
+		{
+			Files.createDirectories(parent);
+		}
+
+		Files.walk(sourcePathIn).forEach(source ->
+		{
+			final var destination = Paths.get(destinationPathIn.toString(), source.toString().substring(sourcePathIn.toString().length()));
+
+			try
+			{
+				FileUtils.copyFile(source, destination, linesFilterFunctionIn);
+			}
+			catch (final IOException e)
+			{
+				e.printStackTrace();
+			}
+		});
+	}
+
 	// Delete methods
 
 	/**
@@ -2586,4 +2905,5 @@ public class FileUtils
 			FileUtils.deleteDirectory(path);
 		}
 	}
+
 }
