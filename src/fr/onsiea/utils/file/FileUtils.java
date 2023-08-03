@@ -58,9 +58,16 @@ public class FileUtils
 {
 	// Create directory and file methods
 
-	public final static void createDirectory(final String... folderPathIn) throws IOException
+	/**
+	 * If not exists create all directories from foldersPathIn, but if file exist and isn't directory throw IOException
+	 *
+	 * @author Seynax
+	 * @param foldersPathIn
+	 * @throws IOException if file exist and isn't directory
+	 */
+	public final static void createDirectory(final String... foldersPathIn) throws IOException
 	{
-		for (final var path : folderPathIn)
+		for (final var path : foldersPathIn)
 		{
 			final var folder = new File(path);
 
@@ -78,6 +85,13 @@ public class FileUtils
 		}
 	}
 
+	/**
+	 * If not exists create all directories from foldersIn, but if file exist and isn't directory throw IOException
+	 *
+	 * @author Seynax
+	 * @param foldersIn
+	 * @throws IOException if file exist and isn't directory
+	 */
 	public final static void createDirectory(final File... foldersIn) throws IOException
 	{
 		for (final var folder : foldersIn)
@@ -96,6 +110,13 @@ public class FileUtils
 		}
 	}
 
+	/**
+	 * If not exists create all directories from foldersPathIn, but if file exist and isn't directory throw IOException
+	 *
+	 * @author Seynax
+	 * @param foldersPathIn
+	 * @throws IOException if file exist and isn't directory
+	 */
 	public final static void createDirectory(final Path... foldersPathIn) throws IOException
 	{
 		for (final var folderPath : foldersPathIn)
@@ -116,6 +137,13 @@ public class FileUtils
 		}
 	}
 
+	/**
+	 * If not exists create all files from filesPathIn, but if parent of file exists and isn't directory or file exist and is directory throw IOException
+	 *
+	 * @author Seynax
+	 * @param filesPathIn
+	 * @throws IOException if parent of file exists and isn't directory or file exist and is directory
+	 */
 	public final static void createFile(final String... filesPathIn) throws IOException
 	{
 		for (final var path : filesPathIn)
@@ -149,6 +177,13 @@ public class FileUtils
 		}
 	}
 
+	/**
+	 * If not exists create all files from filesIn, but if parent of file exists and isn't directory or file exist and is directory throw IOException
+	 *
+	 * @author Seynax
+	 * @param filesIn
+	 * @throws IOException if parent of file exists and isn't directory or file exist and is directory
+	 */
 	public final static void createFile(final File... filesIn) throws IOException
 	{
 		for (final var file : filesIn)
@@ -180,6 +215,13 @@ public class FileUtils
 		}
 	}
 
+	/**
+	 * If not exists create all files from filesPathIn, but if parent of file exists and isn't directory or file exist and is directory throw IOException
+	 *
+	 * @author Seynax
+	 * @param filesPathIn
+	 * @throws IOException if parent of file exists and isn't directory or file exist and is directory
+	 */
 	public final static void createFile(final Path... filesPathIn) throws IOException
 	{
 		for (final var filePath : filesPathIn)
