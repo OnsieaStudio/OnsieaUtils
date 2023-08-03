@@ -1169,4 +1169,273 @@ public class FileUtils
 	{
 		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
 	}
+
+	// Replace methods
+
+	/**
+	 * Write all bytes from bytesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void replace(final String filePathIn, final byte[] bytesIn) throws IOException
+	{
+		FileUtils.write(Paths.get(filePathIn), bytesIn);
+	}
+
+	/**
+	 * Write all bytes from bytesIn into fileIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void replace(final File fileIn, final byte[] bytesIn) throws IOException
+	{
+		FileUtils.write(fileIn.toPath(), bytesIn);
+	}
+
+	/**
+	 * Write all bytes from bytesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param bytesIn
+	 * @throws IOException
+	 */
+	public final static void replace(final Path filePathIn, final byte[] bytesIn) throws IOException
+	{
+		if (Files.exists(filePathIn) && Files.isDirectory(filePathIn))
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + filePathIn + "\" because file exists and is directory !");
+		}
+
+		Files.write(filePathIn, bytesIn);
+	}
+
+	/**
+	 * Write all chars from charsIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void replace(final String filePathIn, final char[] charsIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), charsIn);
+	}
+
+	/**
+	 * Write all chars from charsIn into fileIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void replace(final File fileIn, final char[] charsIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(charsIn);
+		}
+	}
+
+	/**
+	 * Write all chars from charsIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param charsIn
+	 * @throws IOException
+	 */
+	public final static void replace(final Path filePathIn, final char[] charsIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), charsIn);
+	}
+
+	/**
+	 * Write String content from contentIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void replace(final String filePathIn, final String contentIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), contentIn);
+	}
+
+	/**
+	 * Write String content from contentIn into fileIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void replace(final File fileIn, final String contentIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(contentIn);
+		}
+	}
+
+	/**
+	 * Write String content from contentIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param contentIn
+	 * @throws IOException
+	 */
+	public final static void replace(final Path filePathIn, final String contentIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), contentIn);
+	}
+
+	/**
+	 * Write all lines separated by "\r\n" from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void replace(final String filePathIn, final List<String> linesIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), linesIn);
+	}
+
+	/**
+	 * Write all lines separated by "\r\n" from linesIn into fileIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void replace(final File fileIn, final List<String> linesIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(line).append("\r\n");
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines separated by "\r\n" from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @throws IOException
+	 */
+	public final static void replace(final Path filePathIn, final List<String> linesIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), linesIn);
+	}
+
+	/**
+	 * Write all lines separated by lineSeparatorIn from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void replace(final String filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		FileUtils.write(new File(filePathIn), linesIn, lineSeparatorIn);
+	}
+
+	/**
+	 * Write all lines separated by lineSeparatorIn from linesIn into fileIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param fileIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void replace(final File fileIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		if (fileIn.exists() && fileIn.isDirectory())
+		{
+			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath() + "\" because file exists and is directory !");
+		}
+
+		final var content = new StringBuilder();
+		for (final var line : linesIn)
+		{
+			content.append(line);
+
+			if (lineSeparatorIn != null)
+			{
+				content.append(lineSeparatorIn);
+			}
+		}
+
+		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
+		{
+			bufferedWriter.write(content.toString());
+		}
+	}
+
+	/**
+	 * Write all lines separated by lineSeparatorIn from linesIn into file from filePathIn<br>
+	 * ATTENTION ! Content of file is replaced with this methods.
+	 *
+	 * @author Seynax
+	 * @param filePathIn
+	 * @param linesIn
+	 * @param lineSeparatorIn
+	 * @throws IOException
+	 */
+	public final static void replace(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn) throws IOException
+	{
+		FileUtils.write(filePathIn.toFile(), linesIn, lineSeparatorIn);
+	}
 }
