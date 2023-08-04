@@ -219,6 +219,7 @@ public class FileUtils
 			}
 		}
 	}
+
 	// Get
 
 	/**
@@ -3523,6 +3524,194 @@ public class FileUtils
 				e.printStackTrace();
 			}
 		});
+	}
+
+	// Move methods
+
+	/**
+	 * Move file(s) from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void move(final String sourcePathIn, final String destinationPathIn) throws IOException
+	{
+		FileUtils.copyFile(sourcePathIn, destinationPathIn);
+
+		if (!FileUtils.sameContent(sourcePathIn, destinationPathIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourcePathIn);
+	}
+
+	/**
+	 * Move file(s) from sourceFIleIn into destinationFileIn
+	 *
+	 * @author Seynax
+	 * @param sourceFIleIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public final static void move(final File sourceFIleIn, final File destinationFileIn) throws IOException
+	{
+		FileUtils.copyFile(sourceFIleIn, destinationFileIn);
+
+		if (!FileUtils.sameContent(sourceFIleIn, destinationFileIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourceFIleIn.getAbsolutePath() + "\" into \"" + destinationFileIn.getAbsolutePath() + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourceFIleIn);
+	}
+
+	/**
+	 * Move file(s) from sourcePathIn into destinationPathIn
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void move(final Path sourcePathIn, final Path destinationPathIn) throws IOException
+	{
+		FileUtils.copyFile(sourcePathIn, destinationPathIn);
+
+		if (!FileUtils.sameContent(sourcePathIn, destinationPathIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourcePathIn);
+	}
+
+	/**
+	 * Move file(s) from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void moveAppend(final String sourcePathIn, final String destinationPathIn) throws IOException
+	{
+		FileUtils.appendIntoFile(sourcePathIn, destinationPathIn);
+
+		if (!FileUtils.sameContent(sourcePathIn, destinationPathIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourcePathIn);
+	}
+
+	/**
+	 * Move file(s) from sourceFIleIn into destinationFileIn<br>
+	 * ATTENTION ! Content is added after existing content in destination file !
+	 *
+	 * @author Seynax
+	 * @param sourceFIleIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public final static void moveAppend(final File sourceFIleIn, final File destinationFileIn) throws IOException
+	{
+		FileUtils.appendIntoFile(sourceFIleIn, destinationFileIn);
+
+		if (!FileUtils.sameContent(sourceFIleIn, destinationFileIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourceFIleIn.getAbsolutePath() + "\" into \"" + destinationFileIn.getAbsolutePath() + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourceFIleIn);
+	}
+
+	/**
+	 * Move file(s) from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Content is added after existing content in destination file !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void moveAppend(final Path sourcePathIn, final Path destinationPathIn) throws IOException
+	{
+		FileUtils.appendIntoFile(sourcePathIn, destinationPathIn);
+
+		if (!FileUtils.sameContent(sourcePathIn, destinationPathIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourcePathIn);
+	}
+
+	/**
+	 * Move file(s) from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Content is added after existing content in destination file !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void moveReplace(final String sourcePathIn, final String destinationPathIn) throws IOException
+	{
+		FileUtils.replaceFile(sourcePathIn, destinationPathIn);
+
+		if (!FileUtils.sameContent(sourcePathIn, destinationPathIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourcePathIn);
+	}
+
+	/**
+	 * Move file(s) from sourceFIleIn into destinationFileIn<br>
+	 * ATTENTION ! Destination file is replaced !
+	 *
+	 * @author Seynax
+	 * @param sourceFIleIn
+	 * @param destinationFileIn
+	 * @throws IOException
+	 */
+	public final static void moveReplace(final File sourceFIleIn, final File destinationFileIn) throws IOException
+	{
+		FileUtils.replaceFile(sourceFIleIn, destinationFileIn);
+
+		if (!FileUtils.sameContent(sourceFIleIn, destinationFileIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourceFIleIn.getAbsolutePath() + "\" into \"" + destinationFileIn.getAbsolutePath() + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourceFIleIn);
+	}
+
+	/**
+	 * Move file(s) from sourcePathIn into destinationPathIn<br>
+	 * ATTENTION ! Destination file is replaced !
+	 *
+	 * @author Seynax
+	 * @param sourcePathIn
+	 * @param destinationPathIn
+	 * @throws IOException
+	 */
+	public final static void moveReplace(final Path sourcePathIn, final Path destinationPathIn) throws IOException
+	{
+		FileUtils.replaceFile(sourcePathIn, destinationPathIn);
+
+		if (!FileUtils.sameContent(sourcePathIn, destinationPathIn))
+		{
+			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn + "\" the destination does not have the same content as the source !");
+		}
+
+		FileUtils.delete(sourcePathIn);
 	}
 
 	// Delete methods
