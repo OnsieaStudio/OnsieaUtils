@@ -8,7 +8,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<version>1.0-SNAPSHOT</version>
 	<name>OnsieaUtils</name>
 	<url>https://github.com/OnsieaStudio/OnsieaUtils</url>
-	<description>2D-3D video game engine. Use Ludart Game Framework (below) to work</description>
+	<description>Common utils used in particular for Onsiea studio projects</description>
 	<inceptionYear>2023</inceptionYear>
 
 	<licenses>
@@ -99,6 +99,43 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 				<configuration>
 					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/${internal.repo}</altDeploymentRepository>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven.source.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>${com.github.site.maven.plugin.version}</version>
+				<configuration>
+					<message>Maven artifacts for ${project.version}</message>
+					<noJekyll>true</noJekyll>  <!-- disable webpage processing -->
+					<outputDirectory>${project.build.directory}/${internal.repo}</outputDirectory>
+					<branch>refs/heads/${repository.branch.name}</branch>
+					<includes><include>**/*</include></includes>
+					<merge>true</merge>
+					<repositoryName>${repository.name}</repositoryName>
+					<repositoryOwner>${repository.owner}</repositoryOwner>
+					<server>github</server>
+				</configuration>
+				<executions> <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
