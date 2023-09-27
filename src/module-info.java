@@ -30,12 +30,12 @@
  * @Author : Seynax (<a href="https://github.com/seynax">...</a>)<br>
  * @Organization : Onsiea Studio (<a href="https://github.com/OnsieaStudio">...</a>)
  */
-module fr.onsiea.utils {
+module fr.onsiea.utils
+{
+	requires lombok;
 	exports fr.onsiea.utils.color.prototype;
 	exports fr.onsiea.utils.function;
 	exports fr.onsiea.utils.file;
 	exports fr.onsiea.utils.logs;
 	exports fr.onsiea.utils.string;
-
-	requires lombok;
 }

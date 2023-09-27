@@ -1,22 +1,22 @@
 /**
  * This file is part of Onsiea Utils project. (https://github.com/OnsieaStudio/OnsieaUtils)<br>
  * <br>
- *
+ * <p>
  * Onsiea Utils is [licensed] (https://github.com/OnsieaStudio/OnsieaUtils/blob/main/LICENSE) under the terms of the
  * "GNU GENERAL PUBLIC LICENSE v3 29 June 2007" (GPL-3).
  * https://github.com/OnsieaStudio/OnsieaUtils/wiki/License#license-and-copyright<br>
  * <br>
- *
+ * <p>
  * Onsiea Utils is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation, either version 2.1 of the License, or any later
  * version.<br>
  * <br>
- *
+ * <p>
  * Onsiea Utils is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU GENERAL PUBLIC LICENSE for more
  * details.<br>
  * <br>
- *
+ * <p>
  * You should have received a copy of the GNU GENERAL PUBLIC LICENSE along with Onsiea Utils. If not, see
  * <https://www.gnu.org/licenses/>.<br>
  * <br>
@@ -51,6 +51,55 @@ import java.util.*;
  */
 public class FileUtils
 {
+	// Links
+
+	public final static void link(String fromIn, String toIn) throws IOException
+	{
+		var file = new File(fromIn);
+		if (!file.exists())
+		{
+			throw new IOException("[ERROR] FileUtils : cannot create symbolic link, file not exists ! \"" + file.getAbsolutePath() + "\"");
+		}
+
+		Files.createLink(Path.of(toIn), file.toPath());
+	}
+
+	public final static void symbolicLink(String fromIn, String toIn) throws IOException
+	{
+		var file = new File(fromIn);
+		if (!file.exists())
+		{
+			throw new IOException("[ERROR] FileUtils : cannot create symbolic link, file not exists ! \"" + file.getAbsolutePath() + "\"");
+		}
+
+		Files.createSymbolicLink(Path.of(toIn), file.toPath());
+	}
+
+	// mkdirs methods
+
+	public final static void mkdirs(String... foldersIn)
+	{
+		for (var folder : foldersIn)
+		{
+			File file = new File(folder);
+
+			if (file.exists())
+			{
+				if (file.isFile())
+				{
+					throw new RuntimeException("[ERROR] Cannot make \"" + folder + "\" directory because exists and is file !");
+				}
+
+				continue;
+			}
+
+			if (!file.mkdirs())
+			{
+				throw new RuntimeException("[ERROR] Cannot make \"" + folder + "\" directory !");
+			}
+		}
+	}
+
 	// File method
 
 	public static File file(String filePathIn)
@@ -166,7 +215,7 @@ public class FileUtils
 	{
 		FileUtils.recursively(
 				_fromFileIn -> FileUtils.recursively(_toFileIn -> functionIn.execute(_fromFileIn, _toFileIn),
-													 fromFilePathIn), fromFilePathIn);
+						fromFilePathIn), fromFilePathIn);
 	}
 
 	/**
@@ -177,13 +226,13 @@ public class FileUtils
 	public static void doubleRecursively(final IDoubleFileFunction functionIn, final File fromFileIn)
 	{
 		FileUtils.recursively(_fromFileIn -> FileUtils.recursively(_toFileIn ->
-																   {
-																	   if (!_fromFileIn.getAbsolutePath().contentEquals(
-																			   _toFileIn.getAbsolutePath()))
-																	   {
-																		   functionIn.execute(_fromFileIn, _toFileIn);
-																	   }
-																   }, fromFileIn), fromFileIn);
+		{
+			if (!_fromFileIn.getAbsolutePath().contentEquals(
+					_toFileIn.getAbsolutePath()))
+			{
+				functionIn.execute(_fromFileIn, _toFileIn);
+			}
+		}, fromFileIn), fromFileIn);
 	}
 
 	/**
@@ -195,13 +244,13 @@ public class FileUtils
 	public static void doubleRecursively(final IDoubleFileFunction functionIn, final Path fromFilePathIn)
 	{
 		FileUtils.recursively(_fromFileIn -> FileUtils.recursively(_toFileIn ->
-																   {
-																	   if (!_fromFileIn.getAbsolutePath().contentEquals(
-																			   _toFileIn.getAbsolutePath()))
-																	   {
-																		   functionIn.execute(_fromFileIn, _toFileIn);
-																	   }
-																   }, fromFilePathIn), fromFilePathIn);
+		{
+			if (!_fromFileIn.getAbsolutePath().contentEquals(
+					_toFileIn.getAbsolutePath()))
+			{
+				functionIn.execute(_fromFileIn, _toFileIn);
+			}
+		}, fromFilePathIn), fromFilePathIn);
 	}
 
 	/**
@@ -211,24 +260,24 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IOIFunction<Boolean, File> filterFunctionIn,
-										 final IDoubleFileFunction functionIn, final String fromFilePathIn)
+	                                     final IDoubleFileFunction functionIn, final String fromFilePathIn)
 	{
 		FileUtils.recursively(_fromFileIn ->
-							  {
-								  if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
-								  {
-									  FileUtils.recursively(_toFileIn ->
-															{
-																if (!_fromFileIn.getAbsolutePath().contentEquals(
-																		_toFileIn.getAbsolutePath()) && (
-																		!_toFileIn.isFile() || filterFunctionIn.execute(
-																				_toFileIn)))
-																{
-																	functionIn.execute(_fromFileIn, _toFileIn);
-																}
-															}, fromFilePathIn);
-								  }
-							  }, fromFilePathIn);
+		{
+			if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
+			{
+				FileUtils.recursively(_toFileIn ->
+				{
+					if (!_fromFileIn.getAbsolutePath().contentEquals(
+							_toFileIn.getAbsolutePath()) && (
+							    !_toFileIn.isFile() || filterFunctionIn.execute(
+									    _toFileIn)))
+					{
+						functionIn.execute(_fromFileIn, _toFileIn);
+					}
+				}, fromFilePathIn);
+			}
+		}, fromFilePathIn);
 	}
 
 	/**
@@ -238,24 +287,24 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IOIFunction<Boolean, File> filterFunctionIn,
-										 final IDoubleFileFunction functionIn, final File fromFileIn)
+	                                     final IDoubleFileFunction functionIn, final File fromFileIn)
 	{
 		FileUtils.recursively(_fromFileIn ->
-							  {
-								  if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
-								  {
-									  FileUtils.recursively(_toFileIn ->
-															{
-																if (!_fromFileIn.getAbsolutePath().contentEquals(
-																		_toFileIn.getAbsolutePath()) && (
-																		!_toFileIn.isFile() || filterFunctionIn.execute(
-																				_toFileIn)))
-																{
-																	functionIn.execute(_fromFileIn, _toFileIn);
-																}
-															}, fromFileIn);
-								  }
-							  }, fromFileIn);
+		{
+			if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
+			{
+				FileUtils.recursively(_toFileIn ->
+				{
+					if (!_fromFileIn.getAbsolutePath().contentEquals(
+							_toFileIn.getAbsolutePath()) && (
+							    !_toFileIn.isFile() || filterFunctionIn.execute(
+									    _toFileIn)))
+					{
+						functionIn.execute(_fromFileIn, _toFileIn);
+					}
+				}, fromFileIn);
+			}
+		}, fromFileIn);
 	}
 
 	/**
@@ -265,24 +314,24 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IOIFunction<Boolean, File> filterFunctionIn,
-										 final IDoubleFileFunction functionIn, final Path fromFilePathIn)
+	                                     final IDoubleFileFunction functionIn, final Path fromFilePathIn)
 	{
 		FileUtils.recursively(_fromFileIn ->
-							  {
-								  if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
-								  {
-									  FileUtils.recursively(_toFileIn ->
-															{
-																if (!_fromFileIn.getAbsolutePath().contentEquals(
-																		_toFileIn.getAbsolutePath()) && (
-																		!_toFileIn.isFile() || filterFunctionIn.execute(
-																				_toFileIn)))
-																{
-																	functionIn.execute(_fromFileIn, _toFileIn);
-																}
-															}, fromFilePathIn);
-								  }
-							  }, fromFilePathIn);
+		{
+			if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
+			{
+				FileUtils.recursively(_toFileIn ->
+				{
+					if (!_fromFileIn.getAbsolutePath().contentEquals(
+							_toFileIn.getAbsolutePath()) && (
+							    !_toFileIn.isFile() || filterFunctionIn.execute(
+									    _toFileIn)))
+					{
+						functionIn.execute(_fromFileIn, _toFileIn);
+					}
+				}, fromFilePathIn);
+			}
+		}, fromFilePathIn);
 	}
 
 	/**
@@ -292,16 +341,16 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IDoubleFileFunction functionIn, final String fromFilePathIn,
-										 final String toFilePathIn)
+	                                     final String toFilePathIn)
 	{
 		FileUtils.recursively(_fromFileIn -> FileUtils.recursively(_toFileIn ->
-																   {
-																	   if (!_fromFileIn.getAbsolutePath().contentEquals(
-																			   _toFileIn.getAbsolutePath()))
-																	   {
-																		   functionIn.execute(_fromFileIn, _toFileIn);
-																	   }
-																   }, toFilePathIn), fromFilePathIn);
+		{
+			if (!_fromFileIn.getAbsolutePath().contentEquals(
+					_toFileIn.getAbsolutePath()))
+			{
+				functionIn.execute(_fromFileIn, _toFileIn);
+			}
+		}, toFilePathIn), fromFilePathIn);
 	}
 
 	/**
@@ -311,16 +360,16 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IDoubleFileFunction functionIn, final File fromFileIn,
-										 final File toFileIn)
+	                                     final File toFileIn)
 	{
 		FileUtils.recursively(_fromFileIn -> FileUtils.recursively(_toFileIn ->
-																   {
-																	   if (!_fromFileIn.getAbsolutePath().contentEquals(
-																			   _toFileIn.getAbsolutePath()))
-																	   {
-																		   functionIn.execute(_fromFileIn, _toFileIn);
-																	   }
-																   }, toFileIn), fromFileIn);
+		{
+			if (!_fromFileIn.getAbsolutePath().contentEquals(
+					_toFileIn.getAbsolutePath()))
+			{
+				functionIn.execute(_fromFileIn, _toFileIn);
+			}
+		}, toFileIn), fromFileIn);
 	}
 
 	/**
@@ -330,16 +379,16 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IDoubleFileFunction functionIn, final Path fromFilePathIn,
-										 final Path toFilePathIn)
+	                                     final Path toFilePathIn)
 	{
 		FileUtils.recursively(_fromFileIn -> FileUtils.recursively(_toFileIn ->
-																   {
-																	   if (!_fromFileIn.getAbsolutePath().contentEquals(
-																			   _toFileIn.getAbsolutePath()))
-																	   {
-																		   functionIn.execute(_fromFileIn, _toFileIn);
-																	   }
-																   }, toFilePathIn), fromFilePathIn);
+		{
+			if (!_fromFileIn.getAbsolutePath().contentEquals(
+					_toFileIn.getAbsolutePath()))
+			{
+				functionIn.execute(_fromFileIn, _toFileIn);
+			}
+		}, toFilePathIn), fromFilePathIn);
 	}
 
 	/**
@@ -349,25 +398,25 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IOIFunction<Boolean, File> filterFunctionIn,
-										 final IDoubleFileFunction functionIn, final String fromFilePathIn,
-										 final String toFilePathIn)
+	                                     final IDoubleFileFunction functionIn, final String fromFilePathIn,
+	                                     final String toFilePathIn)
 	{
 		FileUtils.recursively(_fromFileIn ->
-							  {
-								  if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
-								  {
-									  FileUtils.recursively(_toFileIn ->
-															{
-																if (!_fromFileIn.getAbsolutePath().contentEquals(
-																		_toFileIn.getAbsolutePath()) && (
-																		!_toFileIn.isFile() || filterFunctionIn.execute(
-																				_toFileIn)))
-																{
-																	functionIn.execute(_fromFileIn, _toFileIn);
-																}
-															}, toFilePathIn);
-								  }
-							  }, fromFilePathIn);
+		{
+			if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
+			{
+				FileUtils.recursively(_toFileIn ->
+				{
+					if (!_fromFileIn.getAbsolutePath().contentEquals(
+							_toFileIn.getAbsolutePath()) && (
+							    !_toFileIn.isFile() || filterFunctionIn.execute(
+									    _toFileIn)))
+					{
+						functionIn.execute(_fromFileIn, _toFileIn);
+					}
+				}, toFilePathIn);
+			}
+		}, fromFilePathIn);
 	}
 
 	/**
@@ -377,25 +426,25 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IOIFunction<Boolean, File> filterFunctionIn,
-										 final IDoubleFileFunction functionIn, final File fromFileIn,
-										 final File toFileIn)
+	                                     final IDoubleFileFunction functionIn, final File fromFileIn,
+	                                     final File toFileIn)
 	{
 		FileUtils.recursively(_fromFileIn ->
-							  {
-								  if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
-								  {
-									  FileUtils.recursively(_toFileIn ->
-															{
-																if (!_fromFileIn.getAbsolutePath().contentEquals(
-																		_toFileIn.getAbsolutePath()) && (
-																		!_toFileIn.isFile() || filterFunctionIn.execute(
-																				_toFileIn)))
-																{
-																	functionIn.execute(_fromFileIn, _toFileIn);
-																}
-															}, toFileIn);
-								  }
-							  }, fromFileIn);
+		{
+			if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
+			{
+				FileUtils.recursively(_toFileIn ->
+				{
+					if (!_fromFileIn.getAbsolutePath().contentEquals(
+							_toFileIn.getAbsolutePath()) && (
+							    !_toFileIn.isFile() || filterFunctionIn.execute(
+									    _toFileIn)))
+					{
+						functionIn.execute(_fromFileIn, _toFileIn);
+					}
+				}, toFileIn);
+			}
+		}, fromFileIn);
 	}
 
 	/**
@@ -405,25 +454,25 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void doubleRecursively(final IOIFunction<Boolean, File> filterFunctionIn,
-										 final IDoubleFileFunction functionIn, final Path fromFilePathIn,
-										 final Path toFilePathIn)
+	                                     final IDoubleFileFunction functionIn, final Path fromFilePathIn,
+	                                     final Path toFilePathIn)
 	{
 		FileUtils.recursively(_fromFileIn ->
-							  {
-								  if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
-								  {
-									  FileUtils.recursively(_toFileIn ->
-															{
-																if (!_fromFileIn.getAbsolutePath().contentEquals(
-																		_toFileIn.getAbsolutePath()) && (
-																		!_toFileIn.isFile() || filterFunctionIn.execute(
-																				_toFileIn)))
-																{
-																	functionIn.execute(_fromFileIn, _toFileIn);
-																}
-															}, toFilePathIn);
-								  }
-							  }, fromFilePathIn);
+		{
+			if (!_fromFileIn.isFile() || filterFunctionIn.execute(_fromFileIn))
+			{
+				FileUtils.recursively(_toFileIn ->
+				{
+					if (!_fromFileIn.getAbsolutePath().contentEquals(
+							_toFileIn.getAbsolutePath()) && (
+							    !_toFileIn.isFile() || filterFunctionIn.execute(
+									    _toFileIn)))
+					{
+						functionIn.execute(_fromFileIn, _toFileIn);
+					}
+				}, toFilePathIn);
+			}
+		}, fromFilePathIn);
 	}
 
 	// Recursively methods
@@ -519,7 +568,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void recursively(final IOIFunction<Boolean, File> filterFunctionIn, final IIFunction<File> functionIn,
-								   final String... filesPathIn)
+	                               final String... filesPathIn)
 	{
 		for (final var filePath : filesPathIn)
 		{
@@ -552,7 +601,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void recursively(final IOIFunction<Boolean, File> filterFunctionIn, final IIFunction<File> functionIn,
-								   final File... filesIn)
+	                               final File... filesIn)
 	{
 		for (final var file : filesIn)
 		{
@@ -583,7 +632,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void recursively(final IOIFunction<Boolean, File> filterFunctionIn, final IIFunction<File> functionIn,
-								   final Path... filesPathIn)
+	                               final Path... filesPathIn)
 	{
 		for (final var filePath : filesPathIn)
 		{
@@ -801,7 +850,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void get(final IOIFunction<Boolean, File> filterFunctionIn, final List<File> filesListIn,
-						   final String... filesPathIn)
+	                       final String... filesPathIn)
 	{
 		for (final var filePath : filesPathIn)
 		{
@@ -834,7 +883,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void get(final IOIFunction<Boolean, File> filterFunctionIn, final List<File> filesListIn,
-						   final File... filesIn)
+	                       final File... filesIn)
 	{
 		for (final var file : filesIn)
 		{
@@ -866,7 +915,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void get(final IOIFunction<Boolean, File> filterFunctionIn, final List<File> filesListIn,
-						   final Path... filesPathIn)
+	                       final Path... filesPathIn)
 	{
 		for (final var filePath : filesPathIn)
 		{
@@ -937,13 +986,13 @@ public class FileUtils
 				if (folder.isFile())
 				{
 					throw new IOException("[ERROR] Unable to create folder \"" + folder.getAbsolutePath()
-												  + "\", already exists and is file !");
+					                      + "\", already exists and is file !");
 				}
 			}
 			else if (!folder.mkdirs())
 			{
 				throw new IOException("[ERROR] Unable to create folder \"" + folder.getAbsolutePath()
-											  + "\" (File.mkdirs method failed) !");
+				                      + "\" (File.mkdirs method failed) !");
 			}
 		}
 	}
@@ -966,13 +1015,13 @@ public class FileUtils
 				if (folder.isFile())
 				{
 					throw new IOException("[ERROR] Unable to create folder \"" + folder.getAbsolutePath()
-												  + "\", already exists and is file !");
+					                      + "\", already exists and is file !");
 				}
 			}
 			else if (!folder.mkdirs())
 			{
 				throw new IOException("[ERROR] Unable to create folder \"" + folder.getAbsolutePath()
-											  + "\" (File.mkdirs method failed) !");
+				                      + "\" (File.mkdirs method failed) !");
 			}
 		}
 	}
@@ -996,15 +1045,15 @@ public class FileUtils
 				if (parentFile.isFile())
 				{
 					throw new IOException("[ERROR] Unable to create file \"" + file.getName() + "\", into \""
-												  + parentFile.getAbsolutePath()
-												  + "\" because parent file isn't directory !");
+					                      + parentFile.getAbsolutePath()
+					                      + "\" because parent file isn't directory !");
 				}
 			}
 			else if (!parentFile.mkdirs())
 			{
 				throw new IOException("[ERROR] Unable to create file \"" + file.getName() + "\", into \""
-											  + parentFile.getAbsolutePath()
-											  + "\" because failed to create parent directory (File.mkdirs method failed) !");
+				                      + parentFile.getAbsolutePath()
+				                      + "\" because failed to create parent directory (File.mkdirs method failed) !");
 			}
 
 			if (file.exists())
@@ -1012,13 +1061,13 @@ public class FileUtils
 				if (file.isDirectory())
 				{
 					throw new IOException("[ERROR] Unable to create file \"" + file.getAbsolutePath()
-												  + "\", already exists and is directory !");
+					                      + "\", already exists and is directory !");
 				}
 			}
 			else if (!file.createNewFile())
 			{
 				throw new IOException("[ERROR] Unable to create file \"" + file.getAbsolutePath()
-											  + "\" (File.createNewFile method failed) !");
+				                      + "\" (File.createNewFile method failed) !");
 			}
 		}
 	}
@@ -1040,15 +1089,15 @@ public class FileUtils
 				if (parentFile.isFile())
 				{
 					throw new IOException("[ERROR] Unable to create file \"" + file.getName() + "\", into \""
-												  + parentFile.getAbsolutePath()
-												  + "\" because parent file isn't directory !");
+					                      + parentFile.getAbsolutePath()
+					                      + "\" because parent file isn't directory !");
 				}
 			}
 			else if (!parentFile.mkdirs())
 			{
 				throw new IOException("[ERROR] Unable to create file \"" + file.getName() + "\", into \""
-											  + parentFile.getAbsolutePath()
-											  + "\" because failed to create parent directory !");
+				                      + parentFile.getAbsolutePath()
+				                      + "\" because failed to create parent directory !");
 			}
 
 			if (file.exists())
@@ -1056,13 +1105,13 @@ public class FileUtils
 				if (file.isDirectory())
 				{
 					throw new IOException("[ERROR] Unable to create file \"" + file.getAbsolutePath()
-												  + "\", already exists and is directory !");
+					                      + "\", already exists and is directory !");
 				}
 			}
 			else if (!file.createNewFile())
 			{
 				throw new IOException("[ERROR] Unable to create file \"" + file.getAbsolutePath()
-											  + "\" (File.createNewFile method failed) !");
+				                      + "\" (File.createNewFile method failed) !");
 			}
 		}
 	}
@@ -1078,22 +1127,22 @@ public class FileUtils
 	{
 		for (final var filePath : filesPathIn)
 		{
-			final var file = filePath.toFile();
+			final var file       = filePath.toFile();
 			final var parentFile = file.getParentFile();
 			if (parentFile.exists())
 			{
 				if (parentFile.isFile())
 				{
 					throw new IOException("[ERROR] Unable to create file \"" + file.getName() + "\", into \""
-												  + parentFile.getAbsolutePath()
-												  + "\" because parent file isn't directory !");
+					                      + parentFile.getAbsolutePath()
+					                      + "\" because parent file isn't directory !");
 				}
 			}
 			else if (!parentFile.mkdirs())
 			{
 				throw new IOException("[ERROR] Unable to create file \"" + file.getName() + "\", into \""
-											  + parentFile.getAbsolutePath()
-											  + "\" because failed to create parent directory !");
+				                      + parentFile.getAbsolutePath()
+				                      + "\" because failed to create parent directory !");
 			}
 
 			if (file.exists())
@@ -1101,13 +1150,13 @@ public class FileUtils
 				if (file.isDirectory())
 				{
 					throw new IOException("[ERROR] Unable to create file \"" + file.getAbsolutePath()
-												  + "\", already exists and is directory !");
+					                      + "\", already exists and is directory !");
 				}
 			}
 			else if (!file.createNewFile())
 			{
 				throw new IOException("[ERROR] Unable to create file \"" + file.getAbsolutePath()
-											  + "\" (File.createNewFile method failed) !");
+				                      + "\" (File.createNewFile method failed) !");
 			}
 		}
 	}
@@ -1426,7 +1475,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static Collection<String> forEachLinesAndAdd(final String filePathIn,
-														final IOIFunction<String, String> functionIn)
+	                                                    final IOIFunction<String, String> functionIn)
 	{
 		return FileUtils.forEachLinesAndAdd(new File(filePathIn), functionIn);
 	}
@@ -1499,7 +1548,7 @@ public class FileUtils
 		{
 			digest = MessageDigest.getInstance("SHA-1");
 
-			var n = 0;
+			var       n      = 0;
 			final var buffer = new byte[8192];
 			while (n != -1)
 			{
@@ -1649,13 +1698,13 @@ public class FileUtils
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot compare files because \"" + fromFileIn.getAbsolutePath() + "\" not exists ! (\""
-							+ fromFileIn.getAbsolutePath() + " <=> " + toFileIn.getAbsolutePath() + "\")");
+					+ fromFileIn.getAbsolutePath() + " <=> " + toFileIn.getAbsolutePath() + "\")");
 		}
 		if (!toFileIn.exists())
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot compare files because \"" + toFileIn.getAbsolutePath() + "\" not exists ! (\""
-							+ fromFileIn.getAbsolutePath() + " <=> " + toFileIn.getAbsolutePath() + "\")");
+					+ fromFileIn.getAbsolutePath() + " <=> " + toFileIn.getAbsolutePath() + "\")");
 		}
 
 		if (fromFileIn.getAbsolutePath().contentEquals(toFileIn.getAbsolutePath()))
@@ -1673,7 +1722,7 @@ public class FileUtils
 			if (toFileIn.isDirectory())
 			{
 				final var fromChildFiles = fromFileIn.listFiles();
-				final var toChildFiles = toFileIn.listFiles();
+				final var toChildFiles   = toFileIn.listFiles();
 
 				if (fromChildFiles == null)
 				{
@@ -1702,7 +1751,7 @@ public class FileUtils
 		if (toFileIn.isFile())
 		{
 			final var fromSHA = FileUtils.sha(fromFileIn);
-			final var toSHA = FileUtils.sha(toFileIn);
+			final var toSHA   = FileUtils.sha(toFileIn);
 
 			for (var i = 0; i < Objects.requireNonNull(fromSHA).length; i++)
 			{
@@ -1763,7 +1812,7 @@ public class FileUtils
 		if (Files.exists(filePathIn))
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + filePathIn
-										  + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+			                      + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
 		}
 
 		Files.write(filePathIn, bytesIn);
@@ -1789,7 +1838,7 @@ public class FileUtils
 		if (fileIn.exists())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+			                      + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -1828,14 +1877,14 @@ public class FileUtils
 		if (fileIn.exists())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+			                      + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
 		}
 
 		final var parentFile = fileIn.getParentFile();
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -1874,7 +1923,7 @@ public class FileUtils
 		if (fileIn.exists())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+			                      + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
 		}
 
 		final var content = new StringBuilder();
@@ -1887,7 +1936,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -1928,7 +1977,7 @@ public class FileUtils
 		if (fileIn.exists())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+			                      + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
 		}
 
 		final var content = new StringBuilder();
@@ -1946,7 +1995,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -1972,7 +2021,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void writeEdit(final String filePathIn, final List<String> linesIn,
-								 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                             final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.writeEdit(new File(filePathIn), linesIn, filterFunctionIn);
 	}
@@ -1983,12 +2032,12 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void writeEdit(final File fileIn, final List<String> linesIn,
-								 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                             final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		if (fileIn.exists())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+			                      + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
 		}
 
 		final var content = new StringBuilder();
@@ -2001,7 +2050,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2016,7 +2065,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void writeEdit(final Path filePathIn, final List<String> linesIn,
-								 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                             final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.writeEdit(filePathIn.toFile(), linesIn, filterFunctionIn);
 	}
@@ -2029,7 +2078,7 @@ public class FileUtils
 	 */
 	@SuppressWarnings("FinalStaticMethod")
 	public final static void writeEdit(final String filePathIn, final List<String> linesIn,
-									   final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn)
+	                                   final String lineSeparatorIn, final IOIFunction<String, String> filterFunctionIn)
 	throws IOException
 	{
 		FileUtils.writeEdit(new File(filePathIn), linesIn, lineSeparatorIn, filterFunctionIn);
@@ -2041,12 +2090,12 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void writeEdit(final File fileIn, final List<String> linesIn, final String lineSeparatorIn,
-								 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                             final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		if (fileIn.exists())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
+			                      + "\" because already exists ! Use replace(...) method to replace file content or append(...) to add after existing content.");
 		}
 
 		final var content = new StringBuilder();
@@ -2064,7 +2113,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2080,7 +2129,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void writeEdit(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn,
-								 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                             final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.writeEdit(filePathIn.toFile(), linesIn, lineSeparatorIn, filterFunctionIn);
 	}
@@ -2146,14 +2195,14 @@ public class FileUtils
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var parentFile = fileIn.getParentFile();
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn, true)))
@@ -2195,14 +2244,14 @@ public class FileUtils
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var parentFile = fileIn.getParentFile();
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn, true)))
@@ -2245,7 +2294,7 @@ public class FileUtils
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var content = new StringBuilder();
@@ -2258,7 +2307,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn, true)))
@@ -2302,7 +2351,7 @@ public class FileUtils
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var content = new StringBuilder();
@@ -2320,7 +2369,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn, true)))
@@ -2348,7 +2397,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendEdit(final String filePathIn, final List<String> linesIn,
-								  final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                              final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.appendEdit(new File(filePathIn), linesIn, filterFunctionIn);
 	}
@@ -2360,12 +2409,12 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendEdit(final File fileIn, final List<String> linesIn,
-								  final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                              final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var content = new StringBuilder();
@@ -2378,7 +2427,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2394,7 +2443,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendEdit(final Path filePathIn, final List<String> linesIn,
-								  final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                              final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.appendEdit(filePathIn.toFile(), linesIn, filterFunctionIn);
 	}
@@ -2406,7 +2455,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendEdit(final String filePathIn, final List<String> linesIn, final String lineSeparatorIn,
-								  final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                              final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.appendEdit(new File(filePathIn), linesIn, lineSeparatorIn, filterFunctionIn);
 	}
@@ -2418,12 +2467,12 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendEdit(final File fileIn, final List<String> linesIn, final String lineSeparatorIn,
-								  final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                              final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var content = new StringBuilder();
@@ -2441,7 +2490,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2457,7 +2506,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendEdit(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn,
-								  final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                              final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.appendEdit(filePathIn.toFile(), linesIn, lineSeparatorIn, filterFunctionIn);
 	}
@@ -2523,14 +2572,14 @@ public class FileUtils
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var parentFile = fileIn.getParentFile();
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2571,14 +2620,14 @@ public class FileUtils
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var parentFile = fileIn.getParentFile();
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2620,7 +2669,7 @@ public class FileUtils
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var content = new StringBuilder();
@@ -2633,7 +2682,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2677,7 +2726,7 @@ public class FileUtils
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var content = new StringBuilder();
@@ -2695,7 +2744,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2723,7 +2772,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceByEdit(final String filePathIn, final List<String> linesIn,
-									 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.replaceByEdit(new File(filePathIn), linesIn, filterFunctionIn);
 	}
@@ -2735,12 +2784,12 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceByEdit(final File fileIn, final List<String> linesIn,
-									 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var content = new StringBuilder();
@@ -2753,7 +2802,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2769,7 +2818,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceByEdit(final Path filePathIn, final List<String> linesIn,
-									 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.replaceByEdit(filePathIn.toFile(), linesIn, filterFunctionIn);
 	}
@@ -2781,7 +2830,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceByEdit(final String filePathIn, final List<String> linesIn, final String lineSeparatorIn,
-									 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.replaceByEdit(new File(filePathIn), linesIn, lineSeparatorIn, filterFunctionIn);
 	}
@@ -2793,12 +2842,12 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceByEdit(final File fileIn, final List<String> linesIn, final String lineSeparatorIn,
-									 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		if (fileIn.exists() && fileIn.isDirectory())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\" because file exists and is directory !");
+			                      + "\" because file exists and is directory !");
 		}
 
 		final var content = new StringBuilder();
@@ -2816,7 +2865,7 @@ public class FileUtils
 		if (!parentFile.exists() && !parentFile.mkdirs())
 		{
 			throw new IOException("[ERROR] Cannot write in \"" + fileIn.getAbsolutePath()
-										  + "\", parent directory not exists and creation failure !");
+			                      + "\", parent directory not exists and creation failure !");
 		}
 
 		try (var bufferedWriter = new BufferedWriter(new FileWriter(fileIn)))
@@ -2832,7 +2881,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceByEdit(final Path filePathIn, final List<String> linesIn, final String lineSeparatorIn,
-									 final IOIFunction<String, String> filterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> filterFunctionIn) throws IOException
 	{
 		FileUtils.replaceByEdit(filePathIn.toFile(), linesIn, lineSeparatorIn, filterFunctionIn);
 	}
@@ -2870,13 +2919,13 @@ public class FileUtils
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source file/directory not exists !");
+					+ "\", because source file/directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
 		{
 			throw new IOException("[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + " \"  because destination file/directory already exists ! Use replace(...) method to replace destination file.");
+			                      + " \"  because destination file/directory already exists ! Use replace(...) method to replace destination file.");
 		}
 
 		final var parent = destinationPathIn.getParent();
@@ -2890,25 +2939,25 @@ public class FileUtils
 			try (var stream = Files.walk(sourcePathIn))
 			{
 				stream.takeWhile(sourceIn ->
-								 {
-									 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																											 .substring(
-																													 sourcePathIn.toString()
-																																 .length()));
+				{
+					final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+							.substring(
+									sourcePathIn.toString()
+											.length()));
 
-									 try
-									 {
-										 Files.copy(sourceIn, destination);
-									 }
-									 catch (final IOException e)
-									 {
-										 e.printStackTrace();
+					try
+					{
+						Files.copy(sourceIn, destination);
+					}
+					catch (final IOException e)
+					{
+						e.printStackTrace();
 
-										 return false;
-									 }
+						return false;
+					}
 
-									 return true;
-								 });
+					return true;
+				});
 			}
 		}
 		else
@@ -2948,13 +2997,13 @@ public class FileUtils
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source directory not exists !");
+					+ "\", because source directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
 		{
 			throw new IOException("[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
+			                      + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
 		}
 
 		final var parent = destinationPathIn.getParent();
@@ -2966,25 +3015,25 @@ public class FileUtils
 		try (var stream = Files.walk(sourcePathIn))
 		{
 			stream.takeWhile(sourceIn ->
-							 {
-								 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																										 .substring(
-																												 sourcePathIn.toString()
-																															 .length()));
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+						.substring(
+								sourcePathIn.toString()
+										.length()));
 
-								 try
-								 {
-									 Files.copy(sourceIn, destination);
-								 }
-								 catch (final IOException e)
-								 {
-									 e.printStackTrace();
+				try
+				{
+					Files.copy(sourceIn, destination);
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
 
-									 return false;
-								 }
+					return false;
+				}
 
-								 return true;
-							 });
+				return true;
+			});
 		}
 	}
 
@@ -3022,7 +3071,7 @@ public class FileUtils
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source file/directory not exists !");
+					+ "\", because source file/directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
@@ -3041,32 +3090,32 @@ public class FileUtils
 			try (var stream = Files.walk(sourcePathIn))
 			{
 				stream.takeWhile(sourceIn ->
-								 {
-									 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																											 .substring(
-																													 sourcePathIn.toString()
-																																 .length()));
+				{
+					final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+							.substring(
+									sourcePathIn.toString()
+											.length()));
 
-									 try
-									 {
-										 if (Files.isDirectory(sourceIn))
-										 {
-											 Files.createDirectories(destination);
-										 }
-										 else
-										 {
-											 FileUtils.append(destination, FileUtils.content(sourceIn));
-										 }
-									 }
-									 catch (final IOException e)
-									 {
-										 e.printStackTrace();
+					try
+					{
+						if (Files.isDirectory(sourceIn))
+						{
+							Files.createDirectories(destination);
+						}
+						else
+						{
+							FileUtils.append(destination, FileUtils.content(sourceIn));
+						}
+					}
+					catch (final IOException e)
+					{
+						e.printStackTrace();
 
-										 return false;
-									 }
+						return false;
+					}
 
-									 return true;
-								 });
+					return true;
+				});
 			}
 		}
 		else
@@ -3106,7 +3155,7 @@ public class FileUtils
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source directory not exists !");
+					+ "\", because source directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
@@ -3123,32 +3172,32 @@ public class FileUtils
 		try (var stream = Files.walk(sourcePathIn))
 		{
 			stream.takeWhile(sourceIn ->
-							 {
-								 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																										 .substring(
-																												 sourcePathIn.toString()
-																															 .length()));
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+						.substring(
+								sourcePathIn.toString()
+										.length()));
 
-								 try
-								 {
-									 if (Files.isDirectory(sourceIn))
-									 {
-										 Files.createDirectories(destination);
-									 }
-									 else
-									 {
-										 FileUtils.append(destination, FileUtils.content(sourceIn));
-									 }
-								 }
-								 catch (final IOException e)
-								 {
-									 e.printStackTrace();
+				try
+				{
+					if (Files.isDirectory(sourceIn))
+					{
+						Files.createDirectories(destination);
+					}
+					else
+					{
+						FileUtils.append(destination, FileUtils.content(sourceIn));
+					}
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
 
-									 return false;
-								 }
+					return false;
+				}
 
-								 return true;
-							 });
+				return true;
+			});
 		}
 	}
 
@@ -3186,7 +3235,7 @@ public class FileUtils
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source file/directory not exists !");
+					+ "\", because source file/directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
@@ -3205,23 +3254,23 @@ public class FileUtils
 			try (var stream = Files.walk(sourcePathIn))
 			{
 				stream.takeWhile(sourceIn ->
-								 {
-									 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																											 .substring(
-																													 sourcePathIn.toString()
-																																 .length()));
+				{
+					final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+							.substring(
+									sourcePathIn.toString()
+											.length()));
 
-									 try
-									 {
-										 Files.copy(sourceIn, destination);
-									 }
-									 catch (final IOException e)
-									 {
-										 e.printStackTrace();
-										 return false;
-									 }
-									 return true;
-								 });
+					try
+					{
+						Files.copy(sourceIn, destination);
+					}
+					catch (final IOException e)
+					{
+						e.printStackTrace();
+						return false;
+					}
+					return true;
+				});
 			}
 		}
 		else
@@ -3261,7 +3310,7 @@ public class FileUtils
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source directory not exists !");
+					+ "\", because source directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
@@ -3278,25 +3327,25 @@ public class FileUtils
 		try (var stream = Files.walk(sourcePathIn))
 		{
 			stream.takeWhile(sourceIn ->
-							 {
-								 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																										 .substring(
-																												 sourcePathIn.toString()
-																															 .length()));
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+						.substring(
+								sourcePathIn.toString()
+										.length()));
 
-								 try
-								 {
-									 Files.copy(sourceIn, destination);
-								 }
-								 catch (final IOException e)
-								 {
-									 e.printStackTrace();
+				try
+				{
+					Files.copy(sourceIn, destination);
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
 
-									 return false;
-								 }
+					return false;
+				}
 
-								 return true;
-							 });
+				return true;
+			});
 		}
 	}
 
@@ -3309,7 +3358,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void copyFile(final String sourcePathIn, final String destinationPathIn,
-								final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                            final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.copyFile(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
 	}
@@ -3321,7 +3370,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void copyFile(final File sourceFileIn, final File destinationFileIn,
-								final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                            final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.copyFile(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
 	}
@@ -3333,19 +3382,19 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void copyFile(final Path sourcePathIn, final Path destinationPathIn,
-								final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                            final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		if (!Files.exists(sourcePathIn))
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source file/directory not exists !");
+					+ "\", because source file/directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
 		{
 			throw new IOException("[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + " \"  because destination file/directory already exists ! Use replace(...) method to replace destination file.");
+			                      + " \"  because destination file/directory already exists ! Use replace(...) method to replace destination file.");
 		}
 
 		final var parent = destinationPathIn.getParent();
@@ -3359,35 +3408,35 @@ public class FileUtils
 			try (var stream = Files.walk(sourcePathIn))
 			{
 				stream.takeWhile(sourceIn ->
-								 {
-									 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																											 .substring(
-																													 sourcePathIn.toString()
-																																 .length()));
+				{
+					final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+							.substring(
+									sourcePathIn.toString()
+											.length()));
 
-									 try
-									 {
-										 if (Files.isDirectory(sourceIn))
-										 {
-											 Files.createDirectory(destination);
-										 }
-										 else
-										 {
-											 final var content = new StringBuilder();
-											 FileUtils.forEachLines(sourceIn,
-																	line -> content.append(line).append("\r\n"));
-											 FileUtils.write(destination, content.toString());
-										 }
-									 }
-									 catch (final IOException e)
-									 {
-										 e.printStackTrace();
+					try
+					{
+						if (Files.isDirectory(sourceIn))
+						{
+							Files.createDirectory(destination);
+						}
+						else
+						{
+							final var content = new StringBuilder();
+							FileUtils.forEachLines(sourceIn,
+									line -> content.append(line).append("\r\n"));
+							FileUtils.write(destination, content.toString());
+						}
+					}
+					catch (final IOException e)
+					{
+						e.printStackTrace();
 
-										 return false;
-									 }
+						return false;
+					}
 
-									 return true;
-								 });
+					return true;
+				});
 			}
 		}
 		else
@@ -3405,7 +3454,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void copyDirectory(final String sourcePathIn, final String destinationPathIn,
-									 final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.copyDirectory(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
 	}
@@ -3417,7 +3466,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void copyDirectory(final File sourceFileIn, final File destinationFileIn,
-									 final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.copyDirectory(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
 	}
@@ -3429,19 +3478,19 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void copyDirectory(final Path sourcePathIn, final Path destinationPathIn,
-									 final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                 final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		if (!Files.exists(sourcePathIn))
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source directory not exists !");
+					+ "\", because source directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
 		{
 			throw new IOException("[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
+			                      + " \"  because destination directory already exists ! Use replace(...) method to replace destination file.");
 		}
 
 		final var parent = destinationPathIn.getParent();
@@ -3453,25 +3502,25 @@ public class FileUtils
 		try (var stream = Files.walk(sourcePathIn))
 		{
 			stream.takeWhile(sourceIn ->
-							 {
-								 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																										 .substring(
-																												 sourcePathIn.toString()
-																															 .length()));
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+						.substring(
+								sourcePathIn.toString()
+										.length()));
 
-								 try
-								 {
-									 FileUtils.copyFile(sourceIn, destination, linesFilterFunctionIn);
-								 }
-								 catch (final IOException e)
-								 {
-									 e.printStackTrace();
+				try
+				{
+					FileUtils.copyFile(sourceIn, destination, linesFilterFunctionIn);
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
 
-									 return false;
-								 }
+					return false;
+				}
 
-								 return true;
-							 });
+				return true;
+			});
 		}
 	}
 
@@ -3482,7 +3531,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendIntoFile(final String sourcePathIn, final String destinationPathIn,
-									  final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                  final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.appendIntoFile(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
 	}
@@ -3494,7 +3543,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendIntoFile(final File sourceFileIn, final File destinationFileIn,
-									  final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                  final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.appendIntoFile(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
 	}
@@ -3506,13 +3555,13 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendIntoFile(final Path sourcePathIn, final Path destinationPathIn,
-									  final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                  final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		if (!Files.exists(sourcePathIn))
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source file/directory not exists !");
+					+ "\", because source file/directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
@@ -3531,35 +3580,35 @@ public class FileUtils
 			try (var stream = Files.walk(sourcePathIn))
 			{
 				stream.takeWhile(sourceIn ->
-								 {
-									 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																											 .substring(
-																													 sourcePathIn.toString()
-																																 .length()));
+				{
+					final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+							.substring(
+									sourcePathIn.toString()
+											.length()));
 
-									 try
-									 {
-										 if (Files.isDirectory(sourceIn))
-										 {
-											 Files.createDirectories(destination);
-										 }
-										 else
-										 {
-											 final var content = new StringBuilder();
-											 FileUtils.forEachLines(sourceIn,
-																	line -> content.append(line).append("\r\n"));
-											 FileUtils.append(destination, content.toString());
-										 }
-									 }
-									 catch (final IOException e)
-									 {
-										 e.printStackTrace();
+					try
+					{
+						if (Files.isDirectory(sourceIn))
+						{
+							Files.createDirectories(destination);
+						}
+						else
+						{
+							final var content = new StringBuilder();
+							FileUtils.forEachLines(sourceIn,
+									line -> content.append(line).append("\r\n"));
+							FileUtils.append(destination, content.toString());
+						}
+					}
+					catch (final IOException e)
+					{
+						e.printStackTrace();
 
-										 return false;
-									 }
+						return false;
+					}
 
-									 return true;
-								 });
+					return true;
+				});
 			}
 		}
 		else
@@ -3577,7 +3626,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendIntoDirectory(final String sourcePathIn, final String destinationPathIn,
-										   final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                       final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.appendIntoDirectory(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
 	}
@@ -3589,7 +3638,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendIntoDirectory(final File sourceFileIn, final File destinationFileIn,
-										   final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                       final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.appendIntoDirectory(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
 	}
@@ -3601,13 +3650,13 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void appendIntoDirectory(final Path sourcePathIn, final Path destinationPathIn,
-										   final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                       final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		if (!Files.exists(sourcePathIn))
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source directory not exists !");
+					+ "\", because source directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
@@ -3624,32 +3673,32 @@ public class FileUtils
 		try (var stream = Files.walk(sourcePathIn))
 		{
 			stream.takeWhile(sourceIn ->
-							 {
-								 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																										 .substring(
-																												 sourcePathIn.toString()
-																															 .length()));
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+						.substring(
+								sourcePathIn.toString()
+										.length()));
 
-								 try
-								 {
-									 if (Files.isDirectory(sourceIn))
-									 {
-										 Files.createDirectories(destination);
-									 }
-									 else
-									 {
-										 FileUtils.appendIntoFile(sourceIn, destination, linesFilterFunctionIn);
-									 }
-								 }
-								 catch (final IOException e)
-								 {
-									 e.printStackTrace();
+				try
+				{
+					if (Files.isDirectory(sourceIn))
+					{
+						Files.createDirectories(destination);
+					}
+					else
+					{
+						FileUtils.appendIntoFile(sourceIn, destination, linesFilterFunctionIn);
+					}
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
 
-									 return false;
-								 }
+					return false;
+				}
 
-								 return true;
-							 });
+				return true;
+			});
 		}
 	}
 
@@ -3660,7 +3709,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceFile(final String sourcePathIn, final String destinationPathIn,
-								   final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                               final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.replaceFile(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
 	}
@@ -3672,7 +3721,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceFile(final File sourceFileIn, final File destinationFileIn,
-								   final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                               final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.replaceFile(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
 	}
@@ -3684,13 +3733,13 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceFile(final Path sourcePathIn, final Path destinationPathIn,
-								   final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                               final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		if (!Files.exists(sourcePathIn))
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source file/directory not exists !");
+					+ "\", because source file/directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
@@ -3709,27 +3758,27 @@ public class FileUtils
 			try (var stream = Files.walk(sourcePathIn))
 			{
 				stream.takeWhile(sourceIn ->
-								 {
-									 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																											 .substring(
-																													 sourcePathIn.toString()
-																																 .length()));
+				{
+					final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+							.substring(
+									sourcePathIn.toString()
+											.length()));
 
-									 try
-									 {
-										 final var content = new StringBuilder();
-										 FileUtils.forEachLines(sourceIn, line -> content.append(line).append("\r\n"));
-										 FileUtils.replace(destination, content.toString());
-									 }
-									 catch (final IOException e)
-									 {
-										 e.printStackTrace();
+					try
+					{
+						final var content = new StringBuilder();
+						FileUtils.forEachLines(sourceIn, line -> content.append(line).append("\r\n"));
+						FileUtils.replace(destination, content.toString());
+					}
+					catch (final IOException e)
+					{
+						e.printStackTrace();
 
-										 return false;
-									 }
+						return false;
+					}
 
-									 return true;
-								 });
+					return true;
+				});
 			}
 		}
 		else
@@ -3747,7 +3796,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceDirectory(final String sourcePathIn, final String destinationPathIn,
-										final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                    final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.replaceDirectory(Paths.get(sourcePathIn), Paths.get(destinationPathIn), linesFilterFunctionIn);
 	}
@@ -3759,7 +3808,7 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceDirectory(final File sourceFileIn, final File destinationFileIn,
-										final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                    final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		FileUtils.replaceDirectory(sourceFileIn.toPath(), destinationFileIn.toPath(), linesFilterFunctionIn);
 	}
@@ -3771,13 +3820,13 @@ public class FileUtils
 	 * @author Seynax
 	 */
 	public static void replaceDirectory(final Path sourcePathIn, final Path destinationPathIn,
-										final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
+	                                    final IOIFunction<String, String> linesFilterFunctionIn) throws IOException
 	{
 		if (!Files.exists(sourcePathIn))
 		{
 			throw new FileNotFoundException(
 					"[ERROR] Cannot copy \"" + sourcePathIn + "\" into \"" + destinationPathIn.toString()
-							+ "\", because source directory not exists !");
+					+ "\", because source directory not exists !");
 		}
 
 		if (Files.exists(destinationPathIn))
@@ -3794,25 +3843,25 @@ public class FileUtils
 		try (var stream = Files.walk(sourcePathIn))
 		{
 			stream.takeWhile(sourceIn ->
-							 {
-								 final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
-																										 .substring(
-																												 sourcePathIn.toString()
-																															 .length()));
+			{
+				final var destination = Paths.get(destinationPathIn.toString(), sourceIn.toString()
+						.substring(
+								sourcePathIn.toString()
+										.length()));
 
-								 try
-								 {
-									 FileUtils.replaceFile(sourceIn, destination, linesFilterFunctionIn);
-								 }
-								 catch (final IOException e)
-								 {
-									 e.printStackTrace();
+				try
+				{
+					FileUtils.replaceFile(sourceIn, destination, linesFilterFunctionIn);
+				}
+				catch (final IOException e)
+				{
+					e.printStackTrace();
 
-									 return false;
-								 }
+					return false;
+				}
 
-								 return true;
-							 });
+				return true;
+			});
 		}
 	}
 
@@ -3830,7 +3879,7 @@ public class FileUtils
 		if (FileUtils.sameContent(sourcePathIn, destinationPathIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + "\" the destination does not have the same content as the source !");
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourcePathIn);
@@ -3848,8 +3897,8 @@ public class FileUtils
 		if (FileUtils.sameContent(sourceFIleIn, destinationFileIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourceFIleIn.getAbsolutePath() + "\" into \""
-										  + destinationFileIn.getAbsolutePath()
-										  + "\" the destination does not have the same content as the source !");
+			                      + destinationFileIn.getAbsolutePath()
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourceFIleIn);
@@ -3867,7 +3916,7 @@ public class FileUtils
 		if (FileUtils.sameContent(sourcePathIn, destinationPathIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + "\" the destination does not have the same content as the source !");
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourcePathIn);
@@ -3885,7 +3934,7 @@ public class FileUtils
 		if (FileUtils.sameContent(sourcePathIn, destinationPathIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + "\" the destination does not have the same content as the source !");
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourcePathIn);
@@ -3904,8 +3953,8 @@ public class FileUtils
 		if (FileUtils.sameContent(sourceFIleIn, destinationFileIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourceFIleIn.getAbsolutePath() + "\" into \""
-										  + destinationFileIn.getAbsolutePath()
-										  + "\" the destination does not have the same content as the source !");
+			                      + destinationFileIn.getAbsolutePath()
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourceFIleIn);
@@ -3924,7 +3973,7 @@ public class FileUtils
 		if (FileUtils.sameContent(sourcePathIn, destinationPathIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + "\" the destination does not have the same content as the source !");
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourcePathIn);
@@ -3943,7 +3992,7 @@ public class FileUtils
 		if (FileUtils.sameContent(sourcePathIn, destinationPathIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + "\" the destination does not have the same content as the source !");
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourcePathIn);
@@ -3961,8 +4010,8 @@ public class FileUtils
 		if (FileUtils.sameContent(sourceFIleIn, destinationFileIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourceFIleIn.getAbsolutePath() + "\" into \""
-										  + destinationFileIn.getAbsolutePath()
-										  + "\" the destination does not have the same content as the source !");
+			                      + destinationFileIn.getAbsolutePath()
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourceFIleIn);
@@ -3980,7 +4029,7 @@ public class FileUtils
 		if (FileUtils.sameContent(sourcePathIn, destinationPathIn))
 		{
 			throw new IOException("[ERROR] Moving of \"" + sourcePathIn + "\" into \"" + destinationPathIn
-										  + "\" the destination does not have the same content as the source !");
+			                      + "\" the destination does not have the same content as the source !");
 		}
 
 		FileUtils.delete(sourcePathIn);

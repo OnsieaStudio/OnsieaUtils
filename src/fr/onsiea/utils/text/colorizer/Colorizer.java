@@ -5,28 +5,20 @@
  * This file is part of Onsiea Engine project. (https://github.com/OnsieaStudio/OnsieaEngine)<br>
  * <br>
  *
- * Onsiea Engine is [licensed] (https://github.com/OnsieaStudio/OnsieaEngine/blob/main/LICENSE) under the terms of the
- * "GNU General Public Lesser License v2.1" (LGPL-2.1).
- * https://github.com/OnsieaStudio/OnsieaEngine/wiki/License#license-and-copyright<br>
+ * Onsiea Engine is [licensed] (https://github.com/OnsieaStudio/OnsieaEngine/blob/main/LICENSE) under the terms of the "GNU General Public Lesser License v2.1" (LGPL-2.1). https://github.com/OnsieaStudio/OnsieaEngine/wiki/License#license-and-copyright<br>
  * <br>
  *
- * Onsiea Engine is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation, either version 2.1 of the License, or (at your option)
- * any later version.<br>
+ * Onsiea Engine is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 2.1 of the License, or (at your option) any later version.<br>
  * <br>
  *
- * Onsiea Engine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.<br>
+ * Onsiea Engine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.<br>
  * <br>
  *
- * You should have received a copy of the GNU Lesser General Public License along with Onsiea Engine. If not, see
- * <https://www.gnu.org/licenses/>.<br>
+ * You should have received a copy of the GNU Lesser General Public License along with Onsiea Engine. If not, see <https://www.gnu.org/licenses/>.<br>
  * <br>
  *
- * Neither the name "Onsiea Studio", "Onsiea Engine", or any derivative name or the names of its authors / contributors
- * may be used to endorse or promote products derived from this software and even less to name another project or other
- * work without clear and precise permissions written in advance.<br>
+ * Neither the name "Onsiea Studio", "Onsiea Engine", or any derivative name or the names of its authors / contributors may be used to endorse or promote products derived from this software and even less to name another project or other work without clear and precise
+ * permissions written in advance.<br>
  * <br>
  *
  * @Author : Seynax (https://github.com/seynax)<br>
@@ -54,185 +46,115 @@ public class Colorizer
 	public static void main(final String[] argsIn)
 	{
 		System.out.println(Colorizer.colorizeJava("""
-				/**
-				 * Copyright 2021-2023 Onsiea Studio All rights reserved.<br>
-				 * <br>
-				 *
-				 * This file is part of Onsiea Engine project.
-				 * (https://github.com/OnsieaStudio/OnsieaEngine)<br>
-				 * <br>
-				 *
-				 * Onsiea Engine is [licensed]
-				 * (https://github.com/OnsieaStudio/OnsieaEngine/blob/main/LICENSE) under the terms of
-				 * the "GNU General Public Lesser License v2.1" (LGPL-2.1).
-				 * https://github.com/OnsieaStudio/OnsieaEngine/wiki/License#license-and-copyright<br>
-				 * <br>
-				 *
-				 * Onsiea Engine is free software: you can redistribute it and/or modify
-				 * it under the terms of the GNU Lesser General Public License as published by
-				 * the Free Software Foundation, either version 2.1 of the License, or
-				 * (at your option) any later version.<br>
-				 * <br>
-				 *
-				 * Onsiea Engine is distributed in the hope that it will be useful,
-				 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-				 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-				 * GNU Lesser General Public License for more details.<br>
-				 * <br>
-				 *
-				 * You should have received a copy of the GNU Lesser General Public License
-				 * along with Onsiea Engine. If not, see <https://www.gnu.org/licenses/>.<br>
-				 * <br>
-				 *
-				 * Neither the name "Onsiea Studio", "Onsiea Engine", or any derivative name or the
-				 * names of its authors / contributors may be used to endorse or promote
-				 * products derived from this software and even less to name another project or
-				 * other work without clear and precise permissions written in advance.<br>
-				 * <br>
-				 *
-				 * @Author : Seynax (https://github.com/seynax)<br>
-				 * @Organization : Onsiea Studio (https://github.com/OnsieaStudio)
-				 */
-				package fr.onsiea.utils.text.colorizer;
+				                                          /**
+				                                           * Copyright 2021-2023 Onsiea Studio All rights reserved.<br>
+				                                           * <br>
+				                                           *
+				                                           * This file is part of Onsiea Engine project.
+				                                           * (https://github.com/OnsieaStudio/OnsieaEngine)<br>
+				                                           * <br>
+				                                           *
+				                                           * Onsiea Engine is [licensed]
+				                                           * (https://github.com/OnsieaStudio/OnsieaEngine/blob/main/LICENSE) under the terms of
+				                                           * the "GNU General Public Lesser License v2.1" (LGPL-2.1).
+				                                           * https://github.com/OnsieaStudio/OnsieaEngine/wiki/License#license-and-copyright<br>
+				                                           * <br>
+				                                           *
+				                                           * Onsiea Engine is free software: you can redistribute it and/or modify
+				                                           * it under the terms of the GNU Lesser General Public License as published by
+				                                           * the Free Software Foundation, either version 2.1 of the License, or
+				                                           * (at your option) any later version.<br>
+				                                           * <br>
+				                                           *
+				                                           * Onsiea Engine is distributed in the hope that it will be useful,
+				                                           * but WITHOUT ANY WARRANTY; without even the implied warranty of
+				                                           * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+				                                           * GNU Lesser General Public License for more details.<br>
+				                                           * <br>
+				                                           *
+				                                           * You should have received a copy of the GNU Lesser General Public License
+				                                           * along with Onsiea Engine. If not, see <https://www.gnu.org/licenses/>.<br>
+				                                           * <br>
+				                                           *
+				                                           * Neither the name "Onsiea Studio", "Onsiea Engine", or any derivative name or the
+				                                           * names of its authors / contributors may be used to endorse or promote
+				                                           * products derived from this software and even less to name another project or
+				                                           * other work without clear and precise permissions written in advance.<br>
+				                                           * <br>
+				                                           *
+				                                           * @Author : Seynax (https://github.com/seynax)<br>
+				                                           * @Organization : Onsiea Studio (https://github.com/OnsieaStudio)
+				                                           */
+				                                          package fr.onsiea.utils.text.colorizer;
 
-				import java.util.LinkedHashMap;
-				import java.util.List;
-				import java.util.Map;
-				import java.util.regex.Pattern;
+				                                          import java.util.LinkedHashMap;
+				                                          import java.util.List;
+				                                          import java.util.Map;
+				                                          import java.util.regex.Pattern;
 
-				import fr.onsiea.utils.style.Style;
+				                                          import fr.onsiea.utils.style.Style;
 
-				public class Colorizer
-				{
-					public final static void main(final String[] argsIn)
-					{
-						final Map<String, String[]> simpleTextsStylesIn = new LinkedHashMap<>();
-						simpleTextsStylesIn.put(Style.Color.RED, new String[] {"package", "import", "public", "private", "class", "interface", "enum", "final", "static", "void", "var", "byte", "short", "char", "int", "float", "double", "long", "while", "for", "do", "return"})
+				                                          public class Colorizer
+				                                          {
+				                                          	public final static void main(final String[] argsIn)
+				                                          	{
+				                                          		final Map<String, String[]> simpleTextsStylesIn = new LinkedHashMap<>();
+				                                          		simpleTextsStylesIn.put(Style.Color.RED, new String[] {"package", "import", "public", "private", "class", "interface", "enum", "final", "static", "void", "var", "byte", "short", "char", "int", "float", "double", "long", "while", "for", "do", "return"})
 
 
-						final Map<String, String[]> regexesStylesIn = new LinkedHashMap<>();
-						System.out.println(Colorizer.colorize(simpleTextsStylesIn, regexesStylesIn, ));
-					}
+				                                          		final Map<String, String[]> regexesStylesIn = new LinkedHashMap<>();
+				                                          		System.out.println(Colorizer.colorize(simpleTextsStylesIn, regexesStylesIn, ));
+				                                          	}
 
-					public final static String colorize(final Map<String, String[]> finalSimpleTextsStylesIn, final Map<String, String[]> regexesStylesIn, final String contentIn)
-					{
-						var content = contentIn;
+				                                          	public final static String colorize(final Map<String, String[]> finalSimpleTextsStylesIn, final Map<String, String[]> regexesStylesIn, final String contentIn)
+				                                          	{
+				                                          		var content = contentIn;
 
-						for (final var entry : regexesStylesIn.entrySet())
-						{
-							final var style = entry.getKey();
+				                                          		for (final var entry : regexesStylesIn.entrySet())
+				                                          		{
+				                                          			final var style = entry.getKey();
 
-							for (final var regex : entry.getValue())
-							{
-								final var	pattern	= Pattern.compile(regex);
-								final var	matcher	= pattern.matcher(content);
+				                                          			for (final var regex : entry.getValue())
+				                                          			{
+				                                          				final var	pattern	= Pattern.compile(regex);
+				                                          				final var	matcher	= pattern.matcher(content);
 
-								while (matcher.find())
-								{
-									content = content.replaceAll(matcher.group(), style + matcher.group() + Style.BASE);
-								}
-							}
-						}
+				                                          				while (matcher.find())
+				                                          				{
+				                                          					content = content.replaceAll(matcher.group(), style + matcher.group() + Style.BASE);
+				                                          				}
+				                                          			}
+				                                          		}
 
-						for (final var entry : regexesStylesIn.entrySet())
-						{
-							final var style = entry.getKey();
+				                                          		for (final var entry : regexesStylesIn.entrySet())
+				                                          		{
+				                                          			final var style = entry.getKey();
 
-							for (final var text : entry.getValue())
-							{
-								content = content.replace(text, style + text + Style.BASE);
-							}
-						}
-						//   \tTEST\t
+				                                          			for (final var text : entry.getValue())
+				                                          			{
+				                                          				content = content.replace(text, style + text + Style.BASE);
+				                                          			}
+				                                          		}
+				                                          		//   \tTEST\t
 
-						return content;
-					}
-				}
-								"""));
-	}
-
-	public static String enclosed(final String beforeIn)
-	{
-		return beforeIn + Colorizer.CONTENT_BASE_BALISE_TAG + Style.RESET;
-	}
-
-	public static String enclosed(final String beforeIn, final String afterIn)
-	{
-		return beforeIn + Colorizer.CONTENT_BASE_BALISE_TAG + afterIn;
-	}
-
-	public static String wholeWord(final String wordIn)
-	{
-		return "(^|[.[^a-zA-Z0-9_]]|[ \t\r\n])" + Pattern.quote(wordIn) + "([.[^a-zA-Z0-9_]]|[ \t\r\n\\.]$)+";
-	}
-
-	public static String wholeRegex(final String regexIn)
-	{
-		return "(^|[.[^a-zA-Z0-9_]]|[ \t\r\n])" + regexIn + "([.[^a-zA-Z0-9_]]|[ \t\r\n\\.]|$)";
-	}
-
-	public static ColorizerPattern[] wholeWords(final String conversionIn, final String... wordsIn)
-	{
-		final var wholeWordsColorizerPattern = new ColorizerPattern[wordsIn.length];
-
-		for (var i = 0; i < wholeWordsColorizerPattern.length; i++)
-		{
-			wholeWordsColorizerPattern[i] = new ColorizerPattern.Builder(Colorizer.wholeWord(wordsIn[i]),
-					conversionIn).elementsToModifyRegex(wordsIn[i]).detectionPatternFlags(Pattern.DOTALL).build();
-		}
-
-		return wholeWordsColorizerPattern;
-	}
-
-	@SuppressWarnings("FinalStaticMethod")
-	public final static ColorizerPattern[] wholeLineWords(final String conversionIn, final String... wordsIn)
-	{
-		final var wholeWordsColorizerPattern = new ColorizerPattern[wordsIn.length];
-
-		for (var i = 0; i < wholeWordsColorizerPattern.length; i++)
-		{
-			wholeWordsColorizerPattern[i] = new ColorizerPattern.Builder(
-					"(^|[.[^a-zA-Z0-9_]]|[ \t\r\n])" + Pattern.quote(wordsIn[i]) + "[.[^;]]*;",
-					conversionIn).elementsToModifyRegex(wordsIn[i]).elementsToKeepRegex(wordsIn[i] + ".*;")
-					.detectionPatternFlags(Pattern.DOTALL).build();
-		}
-
-		return wholeWordsColorizerPattern;
-	}
-
-	public static ColorizerPattern[] wholeRegexes(final String conversionIn, final String... regexesIn)
-	{
-		final var wholeWordsColorizerPattern = new ColorizerPattern[regexesIn.length];
-
-		for (var i = 0; i < wholeWordsColorizerPattern.length; i++)
-		{
-			wholeWordsColorizerPattern[i] = new ColorizerPattern.Builder(Colorizer.wholeRegex(regexesIn[i]),
-					conversionIn).elementsToModifyRegex(regexesIn[i]).detectionPatternFlags(Pattern.DOTALL).build();
-		}
-
-		return wholeWordsColorizerPattern;
+				                                          		return content;
+				                                          	}
+				                                          }
+				                                          				"""));
 	}
 
 	public static String colorizeJava(final String contentIn)
 	{
 		// classes :
 
-		final var patterns = new ColorizerPatterns().group(Colorizer.enclosed(Style.Color.BLACK))
-				.add("(?s)/\\*(.*?\\*/)", // Comment block
-						"//.*" // Comment line
-				).end().add("(?s)\"(.*?\\\")", Colorizer.enclosed(Style.Color.GREEN))
-				.add(Colorizer.wholeLineWords(Colorizer.enclosed(Style.Color.RED), "package", "import"))
-				.add(Colorizer.wholeWords(Colorizer.enclosed(Style.Color.RED), "public", "private", "final", "static",
-						"class", "enum", "interface", "var", "new", "void", "byte", "char", "short", "int", "float",
-						"double", "long", "do", "while", "for", "try", "catch", "switch", "case", "default", "break",
-						"continue", "return"))
-				.add(Colorizer.wholeRegexes(Colorizer.enclosed(Style.Color.BLUE), "[A-Z]+[a-zA-Z0-9_]*"))
-				.add("[a-zA-Z0-9_]+\\(", "[a-zA-Z0-9_]+", Colorizer.enclosed(Style.Color.GREEN))
-				.add("[a-zA-Z_]+[0-9_]*\\)[.[^;]]+", "[a-zA-Z]+[0-9_]*\\)", "[a-zA-Z]+[0-9_]*",
-						Colorizer.enclosed(Style.Color.CYAN), Pattern.DOTALL)
-				.add("[a-zA-Z_]+[0-9_]*,[.[^;]]+", "[a-zA-Z]+[0-9_]*,", "[a-zA-Z]+[0-9_]",
-						Colorizer.enclosed(Style.Color.CYAN), Pattern.DOTALL)
-				.add(Colorizer.wholeRegexes(Colorizer.enclosed(Style.Color.YELLOW), "[a-zA-Z_]+[0-9_]*"));
+		final var patterns = new ColorizerPatterns().group(Colorizer.enclosed(Style.Color.BLACK)).add("(?s)/\\*(.*?\\*/)", // Comment block
+		                                                                                              "//.*" // Comment line
+		                                                                                             ).end().add("(?s)\"(.*?\\\")", Colorizer.enclosed(Style.Color.GREEN)).add(Colorizer.wholeLineWords(Colorizer.enclosed(Style.Color.RED), "package", "import"))
+		                                            .add(Colorizer.wholeWords(Colorizer.enclosed(Style.Color.RED), "public", "private", "final", "static", "class", "enum", "interface", "var", "new", "void", "byte", "char", "short", "int", "float", "double", "long",
+		                                                                      "do", "while", "for", "try", "catch", "switch", "case", "default", "break", "continue", "return")).add(Colorizer.wholeRegexes(Colorizer.enclosed(Style.Color.BLUE), "[A-Z]+[a-zA-Z0-9_]*"))
+		                                            .add("[a-zA-Z0-9_]+\\(", "[a-zA-Z0-9_]+", Colorizer.enclosed(Style.Color.GREEN)).add("[a-zA-Z_]+[0-9_]*\\)[.[^;]]+", "[a-zA-Z]+[0-9_]*\\)", "[a-zA-Z]+[0-9_]*", Colorizer.enclosed(Style.Color.CYAN), Pattern.DOTALL)
+		                                            .add("[a-zA-Z_]+[0-9_]*,[.[^;]]+", "[a-zA-Z]+[0-9_]*,", "[a-zA-Z]+[0-9_]", Colorizer.enclosed(Style.Color.CYAN), Pattern.DOTALL).add(Colorizer.wholeRegexes(Colorizer.enclosed(Style.Color.YELLOW), "[a-zA-Z_]+[0-9_"
+						+ "]*"));
 
 		final var first = new ColorizerToken(contentIn);
 		var current = first;
@@ -278,18 +200,67 @@ public class Colorizer
 		return content.toString();
 	}
 
+	public static String enclosed(final String beforeIn)
+	{
+		return beforeIn + Colorizer.CONTENT_BASE_BALISE_TAG + Style.RESET;
+	}
+
+	@SuppressWarnings("FinalStaticMethod")
+	public final static ColorizerPattern[] wholeLineWords(final String conversionIn, final String... wordsIn)
+	{
+		final var wholeWordsColorizerPattern = new ColorizerPattern[wordsIn.length];
+
+		for (var i = 0; i < wholeWordsColorizerPattern.length; i++)
+		{
+			wholeWordsColorizerPattern[i] = new ColorizerPattern.Builder("(^|[.[^a-zA-Z0-9_]]|[ \t\r\n])" + Pattern.quote(wordsIn[i]) + "[.[^;]]*;", conversionIn).elementsToModifyRegex(wordsIn[i]).elementsToKeepRegex(wordsIn[i] + ".*;")
+			                                                                                                                                                      .detectionPatternFlags(Pattern.DOTALL).build();
+		}
+
+		return wholeWordsColorizerPattern;
+	}
+
+	public static ColorizerPattern[] wholeWords(final String conversionIn, final String... wordsIn)
+	{
+		final var wholeWordsColorizerPattern = new ColorizerPattern[wordsIn.length];
+
+		for (var i = 0; i < wholeWordsColorizerPattern.length; i++)
+		{
+			wholeWordsColorizerPattern[i] = new ColorizerPattern.Builder(Colorizer.wholeWord(wordsIn[i]), conversionIn).elementsToModifyRegex(wordsIn[i]).detectionPatternFlags(Pattern.DOTALL).build();
+		}
+
+		return wholeWordsColorizerPattern;
+	}
+
+	public static ColorizerPattern[] wholeRegexes(final String conversionIn, final String... regexesIn)
+	{
+		final var wholeWordsColorizerPattern = new ColorizerPattern[regexesIn.length];
+
+		for (var i = 0; i < wholeWordsColorizerPattern.length; i++)
+		{
+			wholeWordsColorizerPattern[i] = new ColorizerPattern.Builder(Colorizer.wholeRegex(regexesIn[i]), conversionIn).elementsToModifyRegex(regexesIn[i]).detectionPatternFlags(Pattern.DOTALL).build();
+		}
+
+		return wholeWordsColorizerPattern;
+	}
+
+	public static String wholeWord(final String wordIn)
+	{
+		return "(^|[.[^a-zA-Z0-9_]]|[ \t\r\n])" + Pattern.quote(wordIn) + "([.[^a-zA-Z0-9_]]|[ \t\r\n\\.]$)+";
+	}
+
+	public static String wholeRegex(final String regexIn)
+	{
+		return "(^|[.[^a-zA-Z0-9_]]|[ \t\r\n])" + regexIn + "([.[^a-zA-Z0-9_]]|[ \t\r\n\\.]|$)";
+	}
+
+	public static String enclosed(final String beforeIn, final String afterIn)
+	{
+		return beforeIn + Colorizer.CONTENT_BASE_BALISE_TAG + afterIn;
+	}
+
 	public interface ITag
 	{
 		String detectionRegex();
-
-		Pattern detectionPattern();
-
-		default Matcher matcher(final String contentIn)
-		{
-			return this.detectionPattern().matcher(contentIn);
-		}
-
-		String baliseConversion();
 
 		default String convert(final String contentBeforeConversionIn, final String contentIn)
 		{
@@ -309,6 +280,15 @@ public class Colorizer
 
 			return content;
 		}
+
+		String baliseConversion();
+
+		default Matcher matcher(final String contentIn)
+		{
+			return this.detectionPattern().matcher(contentIn);
+		}
+
+		Pattern detectionPattern();
 	}
 
 	@Getter
@@ -392,37 +372,16 @@ public class Colorizer
 			return this;
 		}
 
-		public ColorizerPatterns add(final String detectionRegexIn, final String conversionIn, final ITag... tagsIn)
+		public ColorizerPatterns add(final String detectionRegexIn, final String toModifyRegexIn, final String conversionIn, final ITag... tagsIn)
 		{
-			Collections.addAll(this.list, ColorizerPattern.of(detectionRegexIn, conversionIn, tagsIn));
+			Collections.addAll(this.list, new ColorizerPattern.Builder(detectionRegexIn, conversionIn, tagsIn).elementsToModifyRegex(toModifyRegexIn).build());
 
 			return this;
 		}
 
-		public ColorizerPatterns add(final String detectionRegexIn, final String toModifyRegexIn,
-				final String conversionIn, final ITag... tagsIn)
+		public ColorizerPatterns add(final String detectionRegexIn, final String toKeepRegexIn, final String toModifyRegexIn, final String conversionIn, final int patternFlagsIn, final ITag... tagsIn)
 		{
-			Collections.addAll(this.list,
-					new ColorizerPattern.Builder(detectionRegexIn, conversionIn, tagsIn).elementsToModifyRegex(
-							toModifyRegexIn).build());
-
-			return this;
-		}
-
-		public ColorizerPatterns add(final String detectionRegexIn, final String toKeepRegexIn,
-				final String toModifyRegexIn, final String conversionIn, final int patternFlagsIn, final ITag... tagsIn)
-		{
-			Collections.addAll(this.list,
-					new ColorizerPattern.Builder(detectionRegexIn, conversionIn, tagsIn).elementsToKeepRegex(
-									toKeepRegexIn).elementsToModifyRegex(toModifyRegexIn).detectionPatternFlags(patternFlagsIn)
-							.build());
-
-			return this;
-		}
-
-		public ColorizerPatterns add(final String detectionRegexIn, final String conversionIn, final List<ITag> tagsIn)
-		{
-			Collections.addAll(this.list, ColorizerPattern.of(detectionRegexIn, conversionIn, tagsIn));
+			Collections.addAll(this.list, new ColorizerPattern.Builder(detectionRegexIn, conversionIn, tagsIn).elementsToKeepRegex(toKeepRegexIn).elementsToModifyRegex(toModifyRegexIn).detectionPatternFlags(patternFlagsIn).build());
 
 			return this;
 		}
@@ -437,13 +396,26 @@ public class Colorizer
 			return this;
 		}
 
-		public ColorizerPatterns add(final List<String> detectionRegexesIn, final String conversionIn,
-				final List<ITag> tagsIn)
+		public ColorizerPatterns add(final String detectionRegexIn, final String conversionIn, final ITag... tagsIn)
+		{
+			Collections.addAll(this.list, ColorizerPattern.of(detectionRegexIn, conversionIn, tagsIn));
+
+			return this;
+		}
+
+		public ColorizerPatterns add(final List<String> detectionRegexesIn, final String conversionIn, final List<ITag> tagsIn)
 		{
 			for (final String detectionRegex : detectionRegexesIn)
 			{
 				this.add(detectionRegex, conversionIn, tagsIn);
 			}
+
+			return this;
+		}
+
+		public ColorizerPatterns add(final String detectionRegexIn, final String conversionIn, final List<ITag> tagsIn)
+		{
+			Collections.addAll(this.list, ColorizerPattern.of(detectionRegexIn, conversionIn, tagsIn));
 
 			return this;
 		}
@@ -512,15 +484,11 @@ public class Colorizer
 
 		public ColorizerPattern(ColorizerPattern.Builder builderIn)
 		{
-			this(builderIn.detectionRegex, builderIn.elementsToKeepRegex, builderIn.elementsToModifyRegex,
-					builderIn.conversion, builderIn.canColorizePrevious, builderIn.canColorize,
-					builderIn.canColorizeNext, builderIn.detectionPatternFlags, builderIn.tags);
+			this(builderIn.detectionRegex, builderIn.elementsToKeepRegex, builderIn.elementsToModifyRegex, builderIn.conversion, builderIn.canColorizePrevious, builderIn.canColorize, builderIn.canColorizeNext, builderIn.detectionPatternFlags, builderIn.tags);
 		}
 
-		public ColorizerPattern(final String detectionRegexIn, final String elementsToKeepRegex,
-				final String elementsToModifyRegexIn, final String conversionIn, final boolean canColorizePreviousIn,
-				final boolean canColorizeIn, final boolean canColorizeNextIn, final int detectionPatternFlagsIn,
-				final Collection<ITag> tagsIn)
+		public ColorizerPattern(final String detectionRegexIn, final String elementsToKeepRegex, final String elementsToModifyRegexIn, final String conversionIn, final boolean canColorizePreviousIn, final boolean canColorizeIn, final boolean canColorizeNextIn,
+		                        final int detectionPatternFlagsIn, final Collection<ITag> tagsIn)
 		{
 			this.detectionRegex = detectionRegexIn;
 			this.detectionPattern = Pattern.compile(this.detectionRegex, detectionPatternFlagsIn);
@@ -544,93 +512,14 @@ public class Colorizer
 			}
 		}
 
-		public static ColorizerPattern of(final String detectionRegexIn, final String conversionIn,
-				final ITag... tagsIn)
+		public static ColorizerPattern of(final String detectionRegexIn, final String conversionIn, final ITag... tagsIn)
 		{
 			return new ColorizerPattern.Builder(detectionRegexIn, conversionIn, tagsIn).build();
 		}
 
-		public static ColorizerPattern of(final String detectionRegexIn, final String conversionIn,
-				final Collection<ITag> tagsIn)
+		public static ColorizerPattern of(final String detectionRegexIn, final String conversionIn, final Collection<ITag> tagsIn)
 		{
 			return new ColorizerPattern.Builder(detectionRegexIn, conversionIn, tagsIn).build();
-		}
-
-		public String convert(final String contentIn)
-		{
-			var content = this.conversion;
-
-			for (final ITag tag : this.tags)
-			{
-				content = tag.convert(contentIn, content);
-			}
-
-			return content;
-		}
-
-		public ColorizerToken modify(final ColorizerToken colorizerTokenIn, final int startIn, final int endIn)
-		{
-			var start = startIn;
-			var end = endIn;
-
-			String newTokenContent = null;
-			var i = 0;
-			final var elementsToKeepMatcher = this.elementsToKeepPattern.matcher(
-					colorizerTokenIn.content.substring(start, end));
-			final var _content = colorizerTokenIn.content;
-			if (elementsToKeepMatcher.find())
-			{
-				// System.out.println("TO MODIFY : " + elementsToModifyMatcher.group() + "[" + elementsToModifyMatcher.start() + "," + elementsToModifyMatcher.end() + "] (" + startIn + "," + endIn + "): " + newTokenContent.length());
-
-				final var group = elementsToKeepMatcher.group();
-
-				start = startIn + elementsToKeepMatcher.start();
-				end = start + group.length();
-				newTokenContent = _content.substring(start, end);
-
-				System.out.println("GROUP : " + group);
-
-				final var elementsToModifyMatcher = this.elementsToModifyPattern.matcher(newTokenContent);
-				if (elementsToModifyMatcher.find())
-				{
-					newTokenContent = newTokenContent.replace(elementsToModifyMatcher.group(),
-							this.convert(elementsToModifyMatcher.group()));
-
-					i++;
-				}
-				// System.out.println("BEFORE : " + end);
-
-				// System.out.println("AFTER : " + end);
-				// System.out.println("TO MODIFY : " + elementsToModifyMatcher.group() + "[" + elementsToModifyMatcher.start() + "," + elementsToModifyMatcher.end() + "] (" + startIn + "," + endIn + "] : " + newTokenContent.length() + "
-				// = "
-				// + start + ", " + end);
-
-			}
-
-			if (i > 0)
-			{
-				// System.out.print("\n".repeat(2));
-
-				colorizerTokenIn.content = _content.substring(0, start); // before
-				colorizerTokenIn.needColorization = this.canColorizePrevious;
-
-				final var next = colorizerTokenIn.next(newTokenContent,
-						this.canColorize); /* between : colorized sentence */
-
-				final var after = _content.substring(end);
-				next.next(after, this.canColorizeNext); // after
-
-				/*
-				 * System.out.println(end + " vs " + endIn); System.out.println("\tFrom :\r\n\t[\r\n\t" + _content.replaceAll("\n", "\t".repeat(2) + "\n") + "\r\n\t]"); System.out.println("\tBefore :\r\n\t[\r\n\t" +
-				 * colorizerTokenIn.content.replaceAll("\n", "\t".repeat(2) + "\n") + "\r\n\t]"); System.out.println("\tBetween :\r\n\t[\r\n\t" + next.content.replaceAll("\n", "\t".repeat(2) + "\n") + "\r\n\t]");
-				 * System.out.println("\tAfter :\r\n\t[\r\n\t" + after.replaceAll("\n", "\t".repeat(2) + "\n") + "\r\n\t]");
-				 *
-				 * System.out.print("\n".repeat(2));
-				 */
-				return next;
-			}
-
-			return null;
 		}
 
 		public boolean colorize(final ColorizerToken colorizerTokenIn)
@@ -658,6 +547,80 @@ public class Colorizer
 			return i > 0;
 		}
 
+		public ColorizerToken modify(final ColorizerToken colorizerTokenIn, final int startIn, final int endIn)
+		{
+			var start = startIn;
+			var end = endIn;
+
+			String newTokenContent = null;
+			var i = 0;
+			final var elementsToKeepMatcher = this.elementsToKeepPattern.matcher(colorizerTokenIn.content.substring(start, end));
+			final var _content = colorizerTokenIn.content;
+			if (elementsToKeepMatcher.find())
+			{
+				// System.out.println("TO MODIFY : " + elementsToModifyMatcher.group() + "[" + elementsToModifyMatcher.start() + "," + elementsToModifyMatcher.end() + "] (" + startIn + "," + endIn + "): " + newTokenContent.length());
+
+				final var group = elementsToKeepMatcher.group();
+
+				start = startIn + elementsToKeepMatcher.start();
+				end = start + group.length();
+				newTokenContent = _content.substring(start, end);
+
+				System.out.println("GROUP : " + group);
+
+				final var elementsToModifyMatcher = this.elementsToModifyPattern.matcher(newTokenContent);
+				if (elementsToModifyMatcher.find())
+				{
+					newTokenContent = newTokenContent.replace(elementsToModifyMatcher.group(), this.convert(elementsToModifyMatcher.group()));
+
+					i++;
+				}
+				// System.out.println("BEFORE : " + end);
+
+				// System.out.println("AFTER : " + end);
+				// System.out.println("TO MODIFY : " + elementsToModifyMatcher.group() + "[" + elementsToModifyMatcher.start() + "," + elementsToModifyMatcher.end() + "] (" + startIn + "," + endIn + "] : " + newTokenContent.length() + "
+				// = "
+				// + start + ", " + end);
+
+			}
+
+			if (i > 0)
+			{
+				// System.out.print("\n".repeat(2));
+
+				colorizerTokenIn.content = _content.substring(0, start); // before
+				colorizerTokenIn.needColorization = this.canColorizePrevious;
+
+				final var next = colorizerTokenIn.next(newTokenContent, this.canColorize); /* between : colorized sentence */
+
+				final var after = _content.substring(end);
+				next.next(after, this.canColorizeNext); // after
+
+				/*
+				 * System.out.println(end + " vs " + endIn); System.out.println("\tFrom :\r\n\t[\r\n\t" + _content.replaceAll("\n", "\t".repeat(2) + "\n") + "\r\n\t]"); System.out.println("\tBefore :\r\n\t[\r\n\t" +
+				 * colorizerTokenIn.content.replaceAll("\n", "\t".repeat(2) + "\n") + "\r\n\t]"); System.out.println("\tBetween :\r\n\t[\r\n\t" + next.content.replaceAll("\n", "\t".repeat(2) + "\n") + "\r\n\t]");
+				 * System.out.println("\tAfter :\r\n\t[\r\n\t" + after.replaceAll("\n", "\t".repeat(2) + "\n") + "\r\n\t]");
+				 *
+				 * System.out.print("\n".repeat(2));
+				 */
+				return next;
+			}
+
+			return null;
+		}
+
+		public String convert(final String contentIn)
+		{
+			var content = this.conversion;
+
+			for (final ITag tag : this.tags)
+			{
+				content = tag.convert(contentIn, content);
+			}
+
+			return content;
+		}
+
 		@Getter
 		@Setter
 		@AllArgsConstructor
@@ -673,6 +636,12 @@ public class Colorizer
 			private boolean canColorizeNext;
 			private int detectionPatternFlags;
 
+			public Builder(String detectionRegexIn, String conversionIn, final ITag... tagsIn)
+			{
+				this(detectionRegexIn, conversionIn);
+				add(tagsIn);
+			}
+
 			public Builder(String detectionRegexIn, String conversionIn)
 			{
 				this.detectionRegex = detectionRegexIn;
@@ -685,23 +654,17 @@ public class Colorizer
 				this.detectionPatternFlags = 0;
 			}
 
-			public Builder(String detectionRegexIn, String conversionIn, final ITag... tagsIn)
+			public Builder add(ITag... tagsIn)
 			{
-				this(detectionRegexIn, conversionIn);
-				add(tagsIn);
+				Collections.addAll(this.tags, tagsIn);
+
+				return this;
 			}
 
 			public Builder(String detectionRegexIn, String conversionIn, final Collection<ITag> tagsIn)
 			{
 				this(detectionRegexIn, conversionIn);
 				add(tagsIn);
-			}
-
-			public Builder add(ITag... tagsIn)
-			{
-				Collections.addAll(this.tags, tagsIn);
-
-				return this;
 			}
 
 			public Builder add(Collection<ITag> tagsIn)
