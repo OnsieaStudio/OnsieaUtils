@@ -208,7 +208,6 @@ public class Colorizer
 		return beforeIn + Colorizer.CONTENT_BASE_BALISE_TAG + Style.RESET;
 	}
 
-	@SuppressWarnings("FinalStaticMethod")
 	public final static ColorizerPattern[] wholeLineWords(final String conversionIn, final String... wordsIn)
 	{
 		final var wholeWordsColorizerPattern = new ColorizerPattern[wordsIn.length];
